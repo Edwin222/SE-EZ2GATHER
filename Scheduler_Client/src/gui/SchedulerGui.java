@@ -20,7 +20,6 @@ public class SchedulerGui {
 	private JTextField text_IP;
 	private JTextField text_PORT;
 	private JTextField text_ID;
-	private char key;
 	private String IP = "", PORT = "", ID = "";
 	
 	/**
@@ -149,7 +148,7 @@ public class SchedulerGui {
 		
 		return empty;
 	}
-	public void clickLogin() { //loginÀ» ´­·¶À»¶§
+	public void clickLogin() { //loginì„ ëˆŒë €ì„ë•Œ
 		IP = text_IP.getText();
 		PORT = text_PORT.getText();
 		ID = text_ID.getText();
