@@ -12,6 +12,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.*;
 
 public class LoginGUI {
@@ -89,6 +90,7 @@ public class LoginGUI {
 		txtpnID.setEditable(false);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnLogin.addActionListener(new LoginActionListener());
 		btnLogin.addKeyListener(new EnterKeyListener());
 		btnLogin.setBackground(new Color(230, 230, 250));

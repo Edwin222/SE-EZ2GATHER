@@ -1,11 +1,9 @@
 package Server;
-<<<<<<< HEAD
-=======
+
 
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
->>>>>>> 9d7163c15c503f4ced12b487fee400bdd5b25c69
 
 public class NetServer {
 	
