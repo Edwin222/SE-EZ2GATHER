@@ -14,22 +14,23 @@ import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.*;
 
-public class SchedulerGui {
+public class LoginGUI {
 
 	private JFrame frmEzgather;
 	private JTextField text_IP;
 	private JTextField text_PORT;
 	private JTextField text_ID;
 	private String IP = "", PORT = "", ID = "";
+	private Boolean flag = false;
 	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					SchedulerGui window = new SchedulerGui();
+					LoginGUI window = new LoginGUI();
 					window.frmEzgather.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,7 +42,7 @@ public class SchedulerGui {
 	/**
 	 * Create the application.
 	 */
-	public SchedulerGui() {
+	public LoginGUI() {
 		initialize();
 	}
 
@@ -51,10 +52,11 @@ public class SchedulerGui {
 	private void initialize() {
 		frmEzgather = new JFrame();
 		frmEzgather.getContentPane().setBackground(new Color(255, 250, 250));
-		frmEzgather.setIconImage(Toolkit.getDefaultToolkit().getImage(SchedulerGui.class.getResource("/resource/ez2gather.png")));
+		frmEzgather.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginGUI.class.getResource("/resource/ez2gather.png")));
 		frmEzgather.setTitle("Ez2Gather");
 		frmEzgather.setBounds(100, 100, 316, 173);
 		frmEzgather.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmEzgather.setResizable(false);
 		
 		text_IP = new JTextField();
 		text_IP.addKeyListener(new EnterKeyListener());
@@ -130,42 +132,39 @@ public class SchedulerGui {
 		);
 		frmEzgather.getContentPane().setLayout(groupLayout);
 	}
-	public boolean check() {
+	public boolean empty() {
 		boolean empty = false;
 		
-		if (text_IP.getText().equals("")) {
-			text_IP.setText("Enter IP");
-			empty = true;
-		}
-		if (text_PORT.getText().equals("")) {
-			text_PORT.setText("Enter PORT");
-			empty = true;
-		}
-		if (text_ID.getText().equals("")) {
-			text_ID.setText("Enter ID");
+		if (text_IP.getText().equals("") || text_PORT.getText().equals("") || text_ID.getText().equals("")) {
 			empty = true;
 		}
 		
 		return empty;
 	}
-	public void clickLogin() { //login을 눌렀을때
+	public void clickLogin() { //login을 눌렀을 때
 		IP = text_IP.getText();
 		PORT = text_PORT.getText();
 		ID = text_ID.getText();
 		
-		if (!check()) {
+		if (empty())		//IP또는 PORT또는 ID창이 비었을 때
+			JOptionPane.showMessageDialog(null, "Please enter IP, PORT or ID", "error", JOptionPane.OK_OPTION);
+		else {
 			frmEzgather.dispose();
 		
 			//request login to client
 			
-			if (/*login fail*/true) {
+			if (/*login fail*/false) {
 				try {
-					SchedulerGui window = new SchedulerGui();
+					LoginGUI window = new LoginGUI();
 					window.frmEzgather.setVisible(true);
 				} catch (Exception ee) {
 					ee.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(null, "check IP, PORT or ID", "error", JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(null, "Please check IP, PORT or ID", "error", JOptionPane.OK_OPTION);
+			}
+			else {
+				SchedulerGUI Scheduler = new SchedulerGUI();
+				Scheduler.launchSceduler();
 			}
 		}
 	}
