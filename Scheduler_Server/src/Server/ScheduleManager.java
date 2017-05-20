@@ -23,15 +23,20 @@ public class ScheduleManager {
 		initializing();
 	}
 
-	public ScheduleManager(String id[]) {
+	public ScheduleManager(String id[]) {  
 		ID = id;
 		initializing();
 	}
 
 	//////////////////////////////////////// initializing/////////////////////////////////////////////////////////
 	public void initializing() {
-		for (int i = 0; i < DATENUM; i++)
-			commonSchedule.add(new DaySchedule());
+			commonSchedule.add(new DaySchedule(Day.MON));
+			commonSchedule.add(new DaySchedule(Day.TUE));
+			commonSchedule.add(new DaySchedule(Day.WED));
+			commonSchedule.add(new DaySchedule(Day.THU));
+			commonSchedule.add(new DaySchedule(Day.FRI));
+			commonSchedule.add(new DaySchedule(Day.SAT));
+			commonSchedule.add(new DaySchedule(Day.SUN));
 	}
 
 	////////////////////////////////////// ID part
@@ -66,8 +71,9 @@ public class ScheduleManager {
 
 			for (int j = 0; j < DATENUM; j++)// initializing for ID in
 												// commonFixedSchedule.
-				for (int k = 0; k < TIMENUM; k++)
-					organizedFixedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + 1 << i);
+				for (int k = 0; k < TIMENUM; k++){
+					organizedFixedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
+				}
 		} else
 			System.out.println("더이상 ID를 생성할 수 없습니다.");
 	}
@@ -79,25 +85,35 @@ public class ScheduleManager {
 			return;
 		} else {
 			ID[IDNUM] = null;
+			
 			// delete existing elements.
+			for(int i = 0; i < DATENUM; i++)
+				for(int j = 0 ; j < TIMENUM; j++){
+					organizedSchedule[i][j] = cleanID(organizedSchedule[i][j],IDNUM);
+					organizedFixedSchedule[i][j] = cleanID(organizedFixedSchedule[i][j],IDNUM);
+					updateCommonList();
+				}
+					
+			
+			
 		}
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	////////////////////////////////////// Update
 	////////////////////////////////////// commonTable////////////////////////////////////////////////////////
-	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx) { // get
-																							// ID
-																							// idx
-																							// and
-																							// sc
-																							// table.
+	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx) {// get
+																								// ID
+																								// idx
+																								// and
+																								// sc
+																								// table.
+																								// update organizedFixedSchedule and organizedSchedule.
 		updateFixedSchedule(fsc, IDidx);
 
 		for (int i = 0; i < DATENUM; i++)
 			for (int j = 0; j < TIMENUM; j++)
 				if (sc[i][j] != 0)
-					organizedSchedule[i][j] = (short) (1 << IDidx);
+					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],IDidx) + (short) (1 << IDidx));
 	}
 
 	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx) {
@@ -130,44 +146,60 @@ public class ScheduleManager {
 			}
 	}
 
-	private void fillFixedSchedule(FixedScheduleUnit f, int Dayidx, int IDidx) {
-		for (int i = f.getBegin(); i < f.getEnd() + 1; i++)
-			organizedFixedSchedule[0][i] = (short) (1 << IDidx);
+	private void fillFixedSchedule(FixedScheduleUnit f, int Dayidx, int IDidx) {// get FixedSchedule and 
+		for (int i = f.getBegin(); i < f.getEnd() + 1; i++){
+			
+			organizedFixedSchedule[Dayidx][i] = (short) (cleanID(organizedFixedSchedule[Dayidx][i],IDidx) + (short) (1 << IDidx));
+		}
 	}
-	/*
-	 * private boolean isFilledTime(short t, int id){ if(t>>id == 1) return
-	 * true; else return false; }
-	 */
+	
+	  private boolean isFilledTime(short t, int id)
+	  { 
+		  if( (t>>id)%2 == 1) 
+			  return true; 
+		  
+		  else 
+			  return false; 
+	  }
+	  
+	  private short cleanID(short sc,int id){ 
+
+		  if(isFilledTime(sc,id))
+			  return (short) (sc-(1<<id));
+		  else
+			  return sc;
+	  }
+	 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////// Update common
 	/////////////////////////////////// List////////////////////////////////////////////
-	public void updateCommonList(short sc[][]) {////////////// find
+	public void updateCommonList() {////////////// find
 												////////////// commonSchedule's
 												////////////// day and set
 												////////////// proper table.
 		for (int i = 0; i < 7; i++)
 			switch (commonSchedule.get(i).getDay()) {
 			case MON:
-				commonSchedule.get(i).setSchedule(sc[0]);
+				commonSchedule.get(i).setSchedule(organizedSchedule[0]);
 				break;
 			case TUE:
-				commonSchedule.get(i).setSchedule(sc[1]);
+				commonSchedule.get(i).setSchedule(organizedSchedule[1]);
 				break;
 			case WED:
-				commonSchedule.get(i).setSchedule(sc[2]);
+				commonSchedule.get(i).setSchedule(organizedSchedule[2]);
 				break;
 			case THU:
-				commonSchedule.get(i).setSchedule(sc[3]);
+				commonSchedule.get(i).setSchedule(organizedSchedule[3]);
 				break;
 			case FRI:
-				commonSchedule.get(i).setSchedule(sc[4]);
+				commonSchedule.get(i).setSchedule(organizedSchedule[4]);
 				break;
 			case SAT:
-				commonSchedule.get(i).setSchedule(sc[5]);
+				commonSchedule.get(i).setSchedule(organizedSchedule[5]);
 				break;
 			case SUN:
-				commonSchedule.get(i).setSchedule(sc[6]);
+				commonSchedule.get(i).setSchedule(organizedSchedule[6]);
 				break;
 			default:
 				break;
@@ -185,6 +217,59 @@ public class ScheduleManager {
 			tmptable[i] = commonSchedule.get(i).getSchedule();
 
 		return tmptable;
+	}
+	
+	///////////////////////////// make commonSchedule next day
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	public void nextDay(){
+		
+		switch(commonSchedule.get(6).getDay()){
+		
+		case MON : commonSchedule.add(0,new DaySchedule(Day.MON));
+		commonSchedule.get(0).setSchedule(organizedFixedSchedule[0]);
+		commonSchedule.remove(7);
+		break;
+		
+		case TUE : commonSchedule.add(0,new DaySchedule(Day.TUE));
+		commonSchedule.get(0).setSchedule(organizedFixedSchedule[1]);
+		commonSchedule.remove(7);
+		break;
+		
+		case WED : commonSchedule.add(0,new DaySchedule(Day.WED));
+		commonSchedule.get(0).setSchedule(organizedFixedSchedule[2]);
+		commonSchedule.remove(7);
+		break;
+		
+		case THU : commonSchedule.add(0,new DaySchedule(Day.THU));
+		commonSchedule.get(0).setSchedule(organizedFixedSchedule[3]);
+		commonSchedule.remove(7);
+		break;
+		
+		case FRI : commonSchedule.add(0,new DaySchedule(Day.FRI));
+		commonSchedule.get(0).setSchedule(organizedFixedSchedule[4]);
+		commonSchedule.remove(7);
+		break;
+		
+		case SAT : commonSchedule.add(0,new DaySchedule(Day.SAT));
+		commonSchedule.get(0).setSchedule(organizedFixedSchedule[5]);
+		commonSchedule.remove(7);
+		break;
+		
+		case SUN : commonSchedule.add(0,new DaySchedule(Day.SUN));
+		commonSchedule.get(0).setSchedule(organizedFixedSchedule[6]);
+		commonSchedule.remove(7);
+		break;
+		}
+		
+		
+	}
+	
+	public Day getToday(){
+		return commonSchedule.get(0).getDay();
+	}
+	
+	public Day getLastday(){
+		return commonSchedule.get(6).getDay();
 	}
 
 }

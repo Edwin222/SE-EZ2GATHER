@@ -14,16 +14,31 @@ public class ScheduleServer {
 
 	// Notice part instance
 	private String Notice;
+	private Day today;
 
 	// Schedule part instance
 	private ScheduleManager Schedule;
+	private short[][] commonSchedule;
 
 	// private schedule
-	private short schedule[][] = new short[DATENUM][TIMENUM];
+	private short[][] schedule = new short[DATENUM][TIMENUM];
 	ArrayList<FixedScheduleUnit> PersonalFixedSchedule;
 
 	///////////////////////////////////////// Notice part
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
+	
+	public ScheduleServer(){		
+		for(int i = 0; Schedule.getToday() != today; i++)
+			Schedule.nextDay();
+	}
+	
+	public ScheduleServer(Day today){
+		this.today = today;
+		
+		for(int i = 0; Schedule.getToday() != today; i++)
+			Schedule.nextDay();
+	}
+	
 	public String getNotice() {
 		return Notice;
 	}
@@ -57,12 +72,18 @@ public class ScheduleServer {
 
 		int IDidx = Schedule.isIDexist(id);
 
-		if (IDidx != -1)
+		if (IDidx != -1){
 			Schedule.updateSchedule(PersonalFixedSchedule, schedule, IDidx);
+			Schedule.updateCommonList();
+		}
 
 		else {
 			System.out.println("존재하지 않는 ID입니다.");
 		}
+	}
+	
+	public void setCommonSchedule(){
+		commonSchedule = Schedule.updateTable();
 	}
 
 }
