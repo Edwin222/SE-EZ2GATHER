@@ -42,15 +42,15 @@ public class UserManager {
 		return ID;
 	}
 	
-	public short getOTable(int row, int col){
+	public short getPointOTable(int row, int col){
 		return organizedTable[row][col];
 	}
 	
-	public short getPTable(int row, int col){
+	public short getPointPTable(int row, int col){
 		return personalTable[row][col];
 	}
 	
-	public short getTTable(int row, int col){
+	public short getPointTTable(int row, int col){
 		return temporaryTable[row][col];
 	}
 	
@@ -141,6 +141,7 @@ public class UserManager {
 	public void save() { //변경된 스케줄테이블을 현재 테이블에 덮어씌운다
 
 		personalTable = temporaryTable;
+		
 		isModified = false;
 		
 	}
