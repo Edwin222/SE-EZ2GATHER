@@ -1,37 +1,72 @@
 package client;
 
-import common.FixedScheduleUnit;
-import common.ScheduleUnit;
+import common.*;
 import java.util.ArrayList;
-
-enum Day { MON, TUE, WED, THU, FRI, SAT, SUN }
 
 public class UserManager {
 	
-	public static final short BLANK = 0; //no schedule
-	public static final short UNFIXED = 1; //unfixed schedule
-	public static final short FIXED = 2; //fixed schedule
-
 	private String ID;
-	private Day lastDay;
+	private Day[] findDay;
+	//constant
+	final short BLANK = 0; //no schedule
+	final short UNFIXED = 1; //unfixed schedule
+	final short FIXED = 2; //fixed schedule
 	
+	final short COL = 7;
+	final short ROW = 12;
 	
-	ArrayList<FixedScheduleUnit> FixedSchedule = new ArrayList<>();
-	private ScheduleUnit Schedule;
-	private Client client;
+	//table for view
+	private ArrayList<FixedScheduleUnit> FixedSchedule;
+	private short[][] organizedTable;
+	private short[][] personalTable;
+	
+	//table for edit
+	private short[][] temporaryTable;
+	private boolean isModified;
+	
+	public UserManager(String _ID){
+		
+		isModified = false;
+		FixedSchedule = new ArrayList<FixedScheduleUnit>();
+		
+		ID = _ID;
+		findDay = new Day[COL];
+		
+		organizedTable = new short[ROW][COL];
+		personalTable = new short[ROW][COL];
+		temporaryTable = new short[ROW][COL];
+	}
+	
+	public String getID()
+	{
+		return ID;
+	}
+	
+	public short getOTable(int row, int col){
+		return organizedTable[row][col];
+	}
+	
+	public short getPTable(int row, int col){
+		return personalTable[row][col];
+	}
+	
+	public short getTTable(int row, int col){
+		return temporaryTable[row][col];
+	}
 	
 	public void add_Schedule(ScheduleUnit schedule, int start_pos, int end_pos) {
 		
 		int begin_time = schedule.getBegin();
 		int end_time = schedule.getEnd();
 		
-		for(int i = begin_time; i< end_time; i++) {
+		for(int i = begin_time; i<= end_time; i++) {
 			
-			for(int j = start_pos; j<end_pos; j++) {
-				client.MySchedule.table[i][j] = UNFIXED;
+			for(int j = start_pos; j<=end_pos; j++) {
+				temporaryTable[i][j] = UNFIXED;
 			}
 		}
 		
+		isModified = true;
 	}
 	
 	public void remove_Schedule(ScheduleUnit schedule, int start_pos, int end_pos) {
@@ -39,13 +74,14 @@ public class UserManager {
 		int begin_time = schedule.getBegin();
 		int end_time = schedule.getEnd();
 		
-		for(int i = begin_time; i< end_time; i++) {
+		for(int i = begin_time; i<=end_time; i++) {
 			
-			for(int j = start_pos; j<end_pos; j++) {
-				client.MySchedule.table[i][j] = BLANK;
+			for(int j = start_pos; j<=end_pos; j++) {
+				temporaryTable[i][j] = BLANK;
 			}
 		}
 		
+		isModified = true;
 	}
 	
 	public void add_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) {
@@ -54,14 +90,15 @@ public class UserManager {
 		int begin_time = schedule.getBegin();
 		int end_time = schedule.getEnd();
 		
-		for(int i = begin_time; i< end_time; i++) {
+		for(int i = begin_time; i<= end_time; i++) {
 			
-			for(int j = start_pos; j<end_pos; j++) {
-				client.MySchedule.table[i][j] = FIXED;
+			for(int j = start_pos; j<=end_pos; j++) {
+				temporaryTable[i][j] = FIXED;
 			}
 		}
 		
 		FixedSchedule.add(schedule); //고정스케줄목록에 더하기
+		isModified = true;
 		
 	}
 	
@@ -71,36 +108,73 @@ public class UserManager {
 		int begin_time = schedule.getBegin();
 		int end_time = schedule.getEnd();
 		
-		for(int i = begin_time; i< end_time; i++) {
+		for(int i=0;i<FixedSchedule.size();i++){
+			FixedScheduleUnit cursor = FixedSchedule.get(i);
 			
-			for(int j = start_pos; j<end_pos; j++) {
-				client.MySchedule.table[i][j] = BLANK;
+			if(cursor.getDay().equals(schedule.getDay())){
+				int median = (begin_time+end_time)/2;
+				
+				if(median >= cursor.getBegin() && median <= cursor.getEnd()){
+					
+					//find col
+					int schedulePos = 0;
+					for(int j=0;j<COL;j++){
+						if(findDay[j].equals(schedule.getDay())){
+							schedulePos = j;
+							break;
+						}
+					}
+					
+					for(int j=cursor.getBegin(); j <= cursor.getEnd(); j++ )
+						temporaryTable[j][schedulePos] = BLANK;
+					
+					FixedSchedule.remove(cursor);
+						
+				}
+				
 			}
 		}
 		
-		FixedSchedule.remove(schedule); //고정스케줄목록에서 빼기
+		isModified = true;
 	}
 	
-	public Day next_Day() {
-		
-		return lastDay;
-	}
-	
-	public short[][] save(short[][] newtable) { //변경된 스케줄테이블을 현재 테이블에 덮어씌운다
+	public void save() { //변경된 스케줄테이블을 현재 테이블에 덮어씌운다
 
-		client.MySchedule.table = newtable;
+		personalTable = temporaryTable;
+		isModified = false;
 		
-		return client.MySchedule.table;
 	}
 	
-	public void ModifySchedule()
+	public void Open_Edit()
 	{
-		short[][] temp = new short[12][7];
+		temporaryTable = personalTable;
+	}
+	
+	public boolean Check_Edited()
+	{
+		return isModified;
+	}
+	
+	public void renewal(Day d, short[][] newPTable, short[][] newOTable)
+	{
+		Day temp = d;
+		for(int i=0; i< COL ;i++){
+			findDay[i] = temp;
+			temp = Day.getNextDay(temp);
+		}
 		
-		temp = client.MySchedule.table;
-		//저장. 종료상태가 될대까지 스케줄 수정
-		
-		//저장 눌르면 save(temp);
+		personalTable = newPTable;
+		organizedTable = newOTable;
+	}
+	
+	public short[][] getPTable()
+	{
+		return personalTable;
+	}
+	
+	public ArrayList<FixedScheduleUnit> getFixedSchedule()
+	{
+		return FixedSchedule;
 	}
 
 }
