@@ -30,7 +30,7 @@ public class Client {
 		MySchedule.table = _MySchedule.table;
 	}
 	
-	public int[][] getScheduleTable() 
+	public short[][] getScheduleTable() 
 	{
 		return MySchedule.table;
 	}

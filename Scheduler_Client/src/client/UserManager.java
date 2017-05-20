@@ -8,9 +8,9 @@ enum Day { MON, TUE, WED, THU, FRI, SAT, SUN }
 
 public class UserManager {
 	
-	public static final int BLANK = 0; //no schedule
-	public static final int UNFIXED = 1; //unfixed schedule
-	public static final int FIXED = 2; //fixed schedule
+	public static final short BLANK = 0; //no schedule
+	public static final short UNFIXED = 1; //unfixed schedule
+	public static final short FIXED = 2; //fixed schedule
 
 	private String ID;
 	private Day lastDay;
@@ -86,7 +86,7 @@ public class UserManager {
 		return lastDay;
 	}
 	
-	public int[][] save(int[][] newtable) { //변경된 스케줄테이블을 현재 테이블에 덮어씌운다
+	public short[][] save(short[][] newtable) { //변경된 스케줄테이블을 현재 테이블에 덮어씌운다
 
 		client.MySchedule.table = newtable;
 		
@@ -95,13 +95,12 @@ public class UserManager {
 	
 	public void ModifySchedule()
 	{
-		int[][] temp = new int[12][7];
+		short[][] temp = new short[12][7];
 		
 		temp = client.MySchedule.table;
 		//저장. 종료상태가 될대까지 스케줄 수정
 		
 		//저장 눌르면 save(temp);
-		
 	}
 
 }

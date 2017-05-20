@@ -2,6 +2,8 @@ package client;
 
 public class ScheduleTable {
 	
-	public static int[][] table = new int[12][7];
+	public static short[][] table = new short[12][7];
+	
+
 
 }
