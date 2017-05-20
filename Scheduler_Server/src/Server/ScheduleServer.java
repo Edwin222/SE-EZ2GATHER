@@ -1,67 +1,68 @@
 package Server;
 
 import java.util.*;
-
+import common.Day;
+import common.FixedScheduleUnit;
 
 public class ScheduleServer {
+	public final int DATENUM = 7;
+	public final int MAXIDNUM = 8;
+	public final int TIMENUM = 12;
 
-	//Scanner
+	// Scanner
 	Scanner scan = new Scanner(System.in);
-	
-	//IDpart instance
-	private final int MAXIDNUM = 6;
-	private String ID[] = new String[MAXIDNUM];
-	private int cur_idnum;
-	
-	//Notice part instance
+
+	// Notice part instance
 	private String Notice;
-	
-	//Schedule part instance
+
+	// Schedule part instance
 	private ScheduleManager Schedule;
-	
-	//ID part Methods
-	public int isIDexist(String id){
-		for(int i = 0; i < cur_idnum ; i++){
-			if(ID[i] == id)
-				return i;
-		}
-		return -1;
-	}	
-	
-	public void makeID(String id){
-		if(isIDexist(id) != -1){
-			System.out.println("이미 존재하는 ID입니다.");
-			return;
-		} 
-		if(cur_idnum < MAXIDNUM){
-			ID[cur_idnum++] = id;
-		}
-		else 
-			System.out.println("더이상 ID를 생성할 수 없습니다.");
-	}
-	
-	public void deleteID(String id){
-		int IDNUM = isIDexist(id);
-		if(IDNUM == -1){
-			System.out.println("존재하지 않는 ID입니다.");
-			return;
-		}
-		else{
-			for(;IDNUM < MAXIDNUM; IDNUM++)
-				ID[IDNUM] = ID[IDNUM+1];
-		}
-	}
-	
-	//Notice part Methods
-	public String getNotice(){
+
+	// private schedule
+	private short schedule[][] = new short[DATENUM][TIMENUM];
+	ArrayList<FixedScheduleUnit> PersonalFixedSchedule;
+
+	///////////////////////////////////////// Notice part
+	///////////////////////////////////////// Methods///////////////////////////////////////////////
+	public String getNotice() {
 		return Notice;
 	}
-	
-	public void setNotice(String Notice){
-		this.Notice = Notice;
+
+	public boolean setNotice(String Notice) {// return if setNoice succeed.
+		if (Notice.length() > 30) {
+			System.out.println("30자를 초과하셨습니다. 다시 입력하여 주십시오");
+			return false;
+		} else {
+			this.Notice = Notice;
+			return true;
+		}
 	}
-	
-	//Schedule part Methods
-	
-	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	///////////////////////////////// ID part
+	///////////////////////////////// Methods////////////////////////////////////////////////////
+	public void makeID() {
+		String id = scan.nextLine();
+		Schedule.makeID(id);
+	}
+
+	public void deleteID() {
+		String id = scan.nextLine();
+		Schedule.deleteID(id);
+	}
+
+	///////////////////////////////////// Schedule part
+	///////////////////////////////////// Methods///////////////////////////////////////////////////////
+	public void setcommonSchedule(String id) {
+
+		int IDidx = Schedule.isIDexist(id);
+
+		if (IDidx != -1)
+			Schedule.updateSchedule(PersonalFixedSchedule, schedule, IDidx);
+
+		else {
+			System.out.println("존재하지 않는 ID입니다.");
+		}
+	}
+
 }

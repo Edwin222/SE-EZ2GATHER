@@ -1,7 +1,5 @@
 package common;
 
-enum Day { MON, TUE, WED, THU, FRI, SAT, SUN }
-
 public class FixedScheduleUnit extends ScheduleUnit {
 	
 	private Day day;
