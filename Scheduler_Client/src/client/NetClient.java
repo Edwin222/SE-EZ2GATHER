@@ -4,13 +4,17 @@ import java.net.*;
 import java.io.*;
 
 public class NetClient {
+	
 	private String IP;
 	private int port;
 	private Socket socket;
+	private UserManager manager;
 	
-	public NetClient(String IP, int port){
+	public NetClient(String IP, int port, String ID){
 		this.IP = IP;
 		this.port = port;
+		
+		manager = new UserManager(ID);
 	}
 	
 	public void connectToServer(){
