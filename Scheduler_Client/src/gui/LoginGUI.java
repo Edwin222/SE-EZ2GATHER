@@ -12,10 +12,11 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.*;
-
+import client.*;
 public class LoginGUI {
-
+	
 	private JFrame frmEzgather;
 	private JTextField text_IP;
 	private JTextField text_PORT;
@@ -89,6 +90,7 @@ public class LoginGUI {
 		txtpnID.setEditable(false);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnLogin.addActionListener(new LoginActionListener());
 		btnLogin.addKeyListener(new EnterKeyListener());
 		btnLogin.setBackground(new Color(230, 230, 250));
@@ -148,12 +150,16 @@ public class LoginGUI {
 		
 		if (empty())		//IP또는 PORT또는 ID창이 비었을 때
 			JOptionPane.showMessageDialog(null, "Please enter IP, PORT or ID", "error", JOptionPane.OK_OPTION);
-		else {
-			frmEzgather.dispose();
 		
+		else {
+			boolean login;
+			frmEzgather.dispose();
+			//NetClient netClient = new NetClient(IP, Integer.parseInt(PORT), ID);
+			//netClient.connectToServer();
+			//login = netClient.sendMessage("LOGIN");
 			//request login to client
 			
-			if (/*login fail*/false) {
+			if (/*!login*/false) {	//login F
 				try {
 					LoginGUI window = new LoginGUI();
 					window.frmEzgather.setVisible(true);
@@ -162,8 +168,8 @@ public class LoginGUI {
 				}
 				JOptionPane.showMessageDialog(null, "Please check IP, PORT or ID", "error", JOptionPane.OK_OPTION);
 			}
-			else {
-				SchedulerGUI Scheduler = new SchedulerGUI();
+			else {			//login S
+				SchedulerGUI Scheduler = new SchedulerGUI(/*netClient*/);
 				Scheduler.launchSceduler();
 			}
 		}
