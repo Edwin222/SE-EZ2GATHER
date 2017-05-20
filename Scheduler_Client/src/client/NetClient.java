@@ -4,7 +4,6 @@ import java.net.*;
 import java.io.*;
 
 public class NetClient {
-	
 	private String IP;
 	private int port;
 	private Socket socket;
@@ -17,6 +16,9 @@ public class NetClient {
 		manager = new UserManager(ID);
 	}
 	
+	public UserManager getManager(){
+		return manager;
+	}
 	public void connectToServer(){
 		try {
 			socket = new Socket(IP, port);
@@ -28,7 +30,7 @@ public class NetClient {
 		
 	}
 	
-	public void sendMessage(String msg){
+	public boolean sendMessage(String msg){
 		try {
 			
 			DataOutputStream sock_out = new DataOutputStream(socket.getOutputStream());
@@ -43,6 +45,8 @@ public class NetClient {
 		} catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		return true;
 	}
 	
 	public void endConnection() {
