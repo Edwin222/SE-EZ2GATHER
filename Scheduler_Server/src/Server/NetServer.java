@@ -81,9 +81,11 @@ public class NetServer {
 					
 					sock_out.close();
 					sock_in.close();
-					
+				
 					//end connection
 					client_socket.close();
+					
+					System.out.println("Client Disconnected : " + client_socket.getInetAddress());
 					
 				} catch(Exception e){
 					e.printStackTrace();

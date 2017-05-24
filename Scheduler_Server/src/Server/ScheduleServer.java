@@ -17,7 +17,7 @@ public class ScheduleServer {
 	private Day today;
 
 	// Schedule part instance
-	private ScheduleManager Schedule = new ScheduleManager();
+	private ScheduleManager Schedule;
 	private short[][] commonSchedule;
 
 	// private schedule
@@ -32,8 +32,11 @@ public class ScheduleServer {
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	
 	public ScheduleServer(){		
+		/*
 		for(int i = 0; Schedule.getToday() != today; i++)
 			Schedule.nextDay();
+		*/
+		Schedule = new ScheduleManager();
 	}
 	
 	public ScheduleServer(Day today){

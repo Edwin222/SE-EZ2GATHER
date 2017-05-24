@@ -9,7 +9,6 @@ public class MainConsole {
 		
 		NetServer.getInstance().openServer();
 		
-		
 		//NetServer.getInstance().closeServer();
 		
 	}

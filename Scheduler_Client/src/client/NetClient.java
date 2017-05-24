@@ -5,6 +5,7 @@ import java.io.*;
 
 
 public class NetClient {
+	
 	private String IP;
 	private int port;
 	private Socket socket;
