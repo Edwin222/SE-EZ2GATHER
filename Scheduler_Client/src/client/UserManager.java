@@ -17,7 +17,7 @@ public class UserManager {
 	
 	//table for view
 	private ArrayList<FixedScheduleUnit> FixedSchedule;
-	private short[][] organizedTable;
+	private char[][] organizedTable;
 	private short[][] personalTable;
 	
 	//table for edit
@@ -32,7 +32,7 @@ public class UserManager {
 		ID = _ID;
 		findDay = new Day[COL];
 		
-		organizedTable = new short[ROW][COL];
+		organizedTable = new char[ROW][COL];
 		personalTable = new short[ROW][COL];
 		temporaryTable = new short[ROW][COL];
 	}
@@ -42,7 +42,7 @@ public class UserManager {
 		return ID;
 	}
 	
-	public short getPointOTable(int row, int col){
+	public char getPointOTable(int row, int col){
 		return organizedTable[row][col];
 	}
 	
@@ -156,7 +156,7 @@ public class UserManager {
 		return isModified;
 	}
 	
-	public void renewal(Day d, short[][] newPTable, short[][] newOTable)
+	public void renewal(Day d, short[][] newPTable, char[][] newOTable)
 	{
 		Day temp = d;
 		for(int i=0; i< COL ;i++){

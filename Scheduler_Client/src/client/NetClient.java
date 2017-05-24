@@ -40,6 +40,18 @@ public class NetClient {
 			//in & out execute
 			sock_out.writeUTF(msg);
 			
+			String cmd = sock_in.readUTF();
+			if(cmd.equals("LOGIN")){
+				sock_out.writeUTF(manager.getID());
+				
+				cmd = sock_in.readUTF();
+				if(cmd.equals("SUCCESS")) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			
 			sock_out.close();
 			sock_in.close();
 			
