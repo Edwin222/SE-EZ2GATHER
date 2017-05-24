@@ -1,10 +1,8 @@
 package client;
-<<<<<<< HEAD
-=======
 
 import java.net.*;
 import java.io.*;
->>>>>>> bf30a74a48db1c8b1a75417333d6bca6a2387f8a
+
 
 public class NetClient {
 	private String IP;
@@ -41,6 +39,18 @@ public class NetClient {
 			
 			//in & out execute
 			sock_out.writeUTF(msg);
+			
+			String cmd = sock_in.readUTF();
+			if(cmd.equals("LOGIN")){
+				sock_out.writeUTF(manager.getID());
+				
+				cmd = sock_in.readUTF();
+				if(cmd.equals("SUCCESS")) {
+					return true;
+				} else {
+					return false;
+				}
+			}
 			
 			sock_out.close();
 			sock_in.close();
