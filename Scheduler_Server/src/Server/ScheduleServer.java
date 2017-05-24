@@ -8,7 +8,7 @@ public class ScheduleServer {
 	public final int DATENUM = 7;
 	public final int MAXIDNUM = 8;
 	public final int TIMENUM = 12;
-
+	public Date date = new Date();
 	// Scanner
 	Scanner scan = new Scanner(System.in);
 
@@ -24,6 +24,10 @@ public class ScheduleServer {
 	private short[][] schedule = new short[DATENUM][TIMENUM];
 	ArrayList<FixedScheduleUnit> PersonalFixedSchedule;
 
+	///////////////////////////////////////// Notice part
+	///////////////////////////////////////// Methods///////////////////////////////////////////////
+	
+	
 	///////////////////////////////////////// Notice part
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	
