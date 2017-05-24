@@ -17,7 +17,7 @@ public class ScheduleServer {
 	private Day today;
 
 	// Schedule part instance
-	private ScheduleManager Schedule;
+	private ScheduleManager Schedule = new ScheduleManager();
 	private short[][] commonSchedule;
 
 	// private schedule
@@ -56,16 +56,25 @@ public class ScheduleServer {
 
 	///////////////////////////////// ID part
 	///////////////////////////////// Methods////////////////////////////////////////////////////
-	public void makeID() {
-		String id = scan.nextLine();
+	public void makeID(String id) {
+		//String id = scan.nextLine();
 		Schedule.makeID(id);
 	}
 
-	public void deleteID() {
-		String id = scan.nextLine();
+	public void deleteID(String id) {
+		//String id = scan.nextLine();
 		Schedule.deleteID(id);
 	}
 
+	public boolean checkID(String id){
+		if(Schedule.isIDexist(id) != -1)
+			return true;
+		else return false;
+	}
+	
+	//public String IDList(){
+	//	return Schedule.getID();
+	//}
 	///////////////////////////////////// Schedule part
 	///////////////////////////////////// Methods///////////////////////////////////////////////////////
 	public void setcommonSchedule(String id) {

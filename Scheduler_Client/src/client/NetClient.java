@@ -1,10 +1,8 @@
 package client;
-<<<<<<< HEAD
-=======
 
 import java.net.*;
 import java.io.*;
->>>>>>> bf30a74a48db1c8b1a75417333d6bca6a2387f8a
+
 
 public class NetClient {
 	private String IP;

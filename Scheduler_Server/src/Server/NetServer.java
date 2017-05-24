@@ -1,15 +1,9 @@
 package Server;
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-
->>>>>>> 63605bbe462af245219024846fee4fbfc62faa7f
 
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
->>>>>>> bf30a74a48db1c8b1a75417333d6bca6a2387f8a
+
 
 public class NetServer {
 	
@@ -30,8 +24,16 @@ public class NetServer {
 	private ExecutorService threadPool;
 	private ServerSocket server;
 	
+	//Server DB
+	private ScheduleServer sServer;
+	
 	private NetServer(){
 		threadPool = Executors.newFixedThreadPool(THREAD_NUM);
+		sServer = new ScheduleServer();
+	}
+	
+	public ScheduleServer getServer(){
+		return sServer;
 	}
 	
 	public void openServer(){
@@ -59,6 +61,15 @@ public class NetServer {
 					
 					if(msg.equals("LOGIN")){
 						// LOGIN : check date & send table information
+						sock_out.writeUTF("LOGIN");
+						
+						String ID = sock_in.readUTF();
+						
+						if(sServer.checkID(ID)){ //login s
+							sock_out.writeUTF("SUCCESS");
+						} else { //login f
+							sock_out.writeUTF("FAIL");
+						}
 						
 					} else if(msg.equals("REFRESH")){
 						// REFRESH : check date & send table information
