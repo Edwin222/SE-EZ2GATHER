@@ -1,11 +1,17 @@
 package Server;
 
-public class MainConsole {
+import java.util.Scanner;
 
+public class MainConsole {
+	
 	public static void main(String args[]){
+		NetServer.getInstance().getServer().makeID("ÃÖ±¤¿ø");
 		
-		ScheduleServer server = new ScheduleServer();
+		NetServer.getInstance().openServer();
 		
-		System.out.println("if you want to Make id, input 'I' and If you want to make Notice, ");
+		
+		//NetServer.getInstance().closeServer();
+		
 	}
+
 }
