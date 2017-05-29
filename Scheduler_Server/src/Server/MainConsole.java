@@ -9,7 +9,7 @@ import common.FixedScheduleUnit;
 public class MainConsole {
 	
 	public static void main(String args[]){
-<<<<<<< HEAD
+
 		ScheduleServer s = new ScheduleServer();
 		Scanner scan = new Scanner(System.in);
 		String order;
@@ -36,19 +36,11 @@ public class MainConsole {
 			case "set" : s.setcommonSchedule(name, k2, k1); break;
 			case "show" : s.Screen(); break;
 			case "showID" : s.ShowId(); break;
-			case "nextDay" : s.NextDay(); break;
+			case "nextDay" : s.nextDay(); break;
 			default :System.out.println("적절하지 않은 명령어 입니다.");
 			}
 					
 		}
-=======
-		NetServer.getInstance().getServer().makeID("최광원");
-		
-		NetServer.getInstance().openServer();
-		
-		//NetServer.getInstance().closeServer();
->>>>>>> f8c4c1835a772004984007b33b0c2f895cd5337a
-		
 	}
 	
 	

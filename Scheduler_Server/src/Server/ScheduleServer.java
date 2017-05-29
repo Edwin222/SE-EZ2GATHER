@@ -22,10 +22,6 @@ public class ScheduleServer {
 	private ScheduleManager Schedule;
 	private short[][] commonSchedule;
 
-	//private schedule
-	//private short[][] schedule = new short[DATENUM][TIMENUM];
-	//ArrayList<FixedScheduleUnit> PersonalFixedSchedule;
-
 	///////////////////////////////////////// Date part
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	public Day getDateDay() {
@@ -69,16 +65,10 @@ public class ScheduleServer {
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	
 	public ScheduleServer(){		
-<<<<<<< HEAD
+
 		this.today = getDateDay();
 		Schedule = new ScheduleManager(today);
-=======
-		/*
-		for(int i = 0; Schedule.getToday() != today; i++)
-			Schedule.nextDay();
-		*/
-		Schedule = new ScheduleManager();
->>>>>>> f8c4c1835a772004984007b33b0c2f895cd5337a
+
 	}
 
 	public String getNotice() {
@@ -99,12 +89,10 @@ public class ScheduleServer {
 	///////////////////////////////// ID part
 	///////////////////////////////// Methods////////////////////////////////////////////////////
 	public void makeID(String id) {
-		//String id = scan.nextLine();
 		Schedule.makeID(id);
 	}
 
 	public void deleteID(String id) {
-		//String id = scan.nextLine();
 		Schedule.deleteID(id);
 	}
 
@@ -114,9 +102,6 @@ public class ScheduleServer {
 		else return false;
 	}
 	
-	//public String IDList(){
-	//	return Schedule.getID();
-	//}
 	///////////////////////////////////// Schedule part
 	///////////////////////////////////// Methods///////////////////////////////////////////////////////
 	public void setcommonSchedule(String id, ArrayList<FixedScheduleUnit> PersonalFixedSchedule, short[][] schedule) {
@@ -126,6 +111,7 @@ public class ScheduleServer {
 		if (IDidx != -1){
 			Schedule.updateSchedule(PersonalFixedSchedule, schedule, IDidx);
 			Schedule.updateCommonList();
+			updateCommonSchedule();
 		}
 
 		else {
@@ -133,12 +119,12 @@ public class ScheduleServer {
 		}
 	}
 	
-	public void setCommonSchedule(){
+	public void updateCommonSchedule(){
 		commonSchedule = Schedule.updateTable();
 	}
 	
 	public void Screen(){
-		setCommonSchedule();
+		updateCommonSchedule();
 		
 		for(int j = 0; j < TIMENUM; j++){
 		for(int i = 0; i < DATENUM; i++)
@@ -154,7 +140,7 @@ public class ScheduleServer {
 				System.out.println(Schedule.getID()[i]);
 	}
 	
-	public void NextDay(){
+	public void nextDay(){
 		Schedule.nextDay();
 	}
 	
