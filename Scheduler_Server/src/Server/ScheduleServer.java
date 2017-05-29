@@ -69,16 +69,14 @@ public class ScheduleServer {
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	
 	public ScheduleServer(){		
-<<<<<<< HEAD
+
 		this.today = getDateDay();
 		Schedule = new ScheduleManager(today);
-=======
 		/*
 		for(int i = 0; Schedule.getToday() != today; i++)
 			Schedule.nextDay();
 		*/
-		Schedule = new ScheduleManager();
->>>>>>> f8c4c1835a772004984007b33b0c2f895cd5337a
+
 	}
 
 	public String getNotice() {

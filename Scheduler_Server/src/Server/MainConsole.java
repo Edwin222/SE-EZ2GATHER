@@ -9,7 +9,7 @@ import common.FixedScheduleUnit;
 public class MainConsole {
 	
 	public static void main(String args[]){
-<<<<<<< HEAD
+		
 		ScheduleServer s = new ScheduleServer();
 		Scanner scan = new Scanner(System.in);
 		String order;
@@ -41,13 +41,7 @@ public class MainConsole {
 			}
 					
 		}
-=======
-		NetServer.getInstance().getServer().makeID("ÃÖ±¤¿ø");
-		
-		NetServer.getInstance().openServer();
-		
-		//NetServer.getInstance().closeServer();
->>>>>>> f8c4c1835a772004984007b33b0c2f895cd5337a
+
 		
 	}
 	
