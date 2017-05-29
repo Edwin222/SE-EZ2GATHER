@@ -1,6 +1,8 @@
 package common;
 
-public class FixedScheduleUnit extends ScheduleUnit {
+import java.io.Serializable;
+
+public class FixedScheduleUnit extends ScheduleUnit implements Serializable {
 	
 	private Day day;
 	

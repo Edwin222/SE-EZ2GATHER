@@ -61,16 +61,15 @@ public class NetServer {
 					
 					if(msg.equals("LOGIN")){
 						// LOGIN : check date & send table information
-						sock_out.writeUTF("LOGIN");
-						
 						String ID = sock_in.readUTF();
 						
 						if(sServer.checkID(ID)){ //login s
 							sock_out.writeUTF("SUCCESS");
+							sServer.nextDay();
+							
 						} else { //login f
 							sock_out.writeUTF("FAIL");
 						}
-						
 					} else if(msg.equals("REFRESH")){
 						// REFRESH : check date & send table information
 						
