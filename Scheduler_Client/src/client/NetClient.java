@@ -48,8 +48,18 @@ public class NetClient {
 				
 				msg = sock_in.readUTF();
 				if(msg.equals("SUCCESS")) {
+
+					//load information from server
+					ObjectInputStream obj_in = new ObjectInputStream(socket.getInputStream());
+					
+					short[][] table = (short[][]) obj_in.readObject();
+					String[] idList = (String[]) obj_in.readObject();
+					
+					
+					obj_in.close();
+					
 					result = true;
-				} else { 
+				} else {
 					result = false;
 				}
 				

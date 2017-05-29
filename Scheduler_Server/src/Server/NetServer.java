@@ -60,12 +60,20 @@ public class NetServer {
 					String msg = sock_in.readUTF();
 					
 					if(msg.equals("LOGIN")){
-						// LOGIN : check date & send table information
+						// LOGIN : check date & send table information						
+
 						String ID = sock_in.readUTF();
 						
 						if(sServer.checkID(ID)){ //login s
 							sock_out.writeUTF("SUCCESS");
 							sServer.nextDay();
+							
+							ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
+							
+							obj_out.writeObject(sServer.getCommonSchedule());
+							obj_out.writeObject(sServer.getIdList());
+							
+							obj_out.close();
 							
 						} else { //login f
 							sock_out.writeUTF("FAIL");

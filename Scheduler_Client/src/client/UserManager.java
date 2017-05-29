@@ -7,6 +7,8 @@ public class UserManager {
 	
 	private String ID;
 	private Day[] findDay;
+	private String[] ID_list;
+
 	//constant
 	final short BLANK = 0; //no schedule
 	final short UNFIXED = 1; //unfixed schedule
@@ -17,9 +19,11 @@ public class UserManager {
 	
 	//table for view
 	private ArrayList<FixedScheduleUnit> FixedSchedule;
-	private char[][] organizedTable;
-	private short[][] personalTable;
+	ArrayList<Integer> people;
 	
+	private short[][] organizedTable;
+	private short[][] personalTable;
+
 	//table for edit
 	private short[][] temporaryTable;
 	private boolean isModified;
@@ -28,11 +32,12 @@ public class UserManager {
 		
 		isModified = false;
 		FixedSchedule = new ArrayList<FixedScheduleUnit>();
+		people = new ArrayList<Integer>();
 		
 		ID = _ID;
 		findDay = new Day[COL];
 		
-		organizedTable = new char[ROW][COL];
+		organizedTable = new short[ROW][COL];
 		personalTable = new short[ROW][COL];
 		temporaryTable = new short[ROW][COL];
 	}
@@ -42,7 +47,7 @@ public class UserManager {
 		return ID;
 	}
 	
-	public char getPointOTable(int row, int col){
+	public short getPointOTable(int row, int col){
 		return organizedTable[row][col];
 	}
 	
@@ -156,7 +161,7 @@ public class UserManager {
 		return isModified;
 	}
 	
-	public void renewal(Day d, short[][] newPTable, char[][] newOTable)
+	public void renewal(Day d, short[][] newPTable, short[][] newOTable)
 	{
 		Day temp = d;
 		for(int i=0; i< COL ;i++){
@@ -173,9 +178,35 @@ public class UserManager {
 		return personalTable;
 	}
 	
+	public void setIDlist(String[] _id)
+	{
+		ID_list = _id;
+	}
+	
+	public void setOTable(short[][] _OTable)
+	{
+		organizedTable = _OTable;
+	}
 	public ArrayList<FixedScheduleUnit> getFixedSchedule()
 	{
 		return FixedSchedule;
 	}
-
+	
+	private boolean check_schedule(short t, int id)
+	{
+		if((t>>id)%2 == 1)
+			return true;
+		else
+			return false;
+	}
+	
+	public ArrayList<Integer> show_organized_table(int i, int j)
+	{
+		for(int k=0; k<ID_list.length; k++)
+			{
+				if(check_schedule((organizedTable[i][j]), k))
+					people.add(k);
+			}
+		return people;
+	}
 }

@@ -80,7 +80,7 @@ public class ScheduleServer {
 
 	public boolean setNotice(String Notice) {// return if setNoice succeed.
 		if (Notice.length() > 30) {
-			System.out.println("30자를 초과하셨습니다. 다시 입력하여 주십시오");
+			System.out.println("input less than 30 letters");
 			return false;
 		} else {
 			this.Notice = Notice;
@@ -124,7 +124,7 @@ public class ScheduleServer {
 		}
 
 		else {
-			System.out.println("존재하지 않는 ID입니다.");
+			System.out.println("not exist ID.");
 		}
 	}
 	
@@ -163,3 +163,4 @@ public class ScheduleServer {
 	}
 	
 }
+

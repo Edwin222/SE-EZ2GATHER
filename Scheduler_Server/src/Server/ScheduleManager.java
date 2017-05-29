@@ -79,7 +79,7 @@ public class ScheduleManager {
 				// idx.
 
 		if (isIDexist(id) != -1) {
-			System.out.println("이미 존재하는 ID입니다.");
+			System.out.println("ID is already exist.");
 			return;
 		}
 		
@@ -96,7 +96,8 @@ public class ScheduleManager {
 				}
 				
 		} else
-			System.out.println("더이상 ID를 생성할 수 없습니다.");
+			System.out.println("cannot make ID anymore.");
+
 		
 		updateCommonList();
 	}
@@ -105,7 +106,7 @@ public class ScheduleManager {
 	public void deleteID(String id) {
 		int IDNUM = isIDexist(id);
 		if (IDNUM == -1) {
-			System.out.println("존재하지 않는 ID입니다.");
+			System.out.println("not exist ID.");
 			return;
 		} else {
 			ID[IDNUM] = null;
