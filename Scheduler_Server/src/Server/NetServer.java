@@ -65,7 +65,7 @@ public class NetServer {
 						
 						if(sServer.checkID(ID)){ //login s
 							sock_out.writeUTF("SUCCESS");
-							
+							sServer.nextDay();
 							
 						} else { //login f
 							sock_out.writeUTF("FAIL");
