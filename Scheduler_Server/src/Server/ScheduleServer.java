@@ -9,6 +9,8 @@ public class ScheduleServer {
 	public final int MAXIDNUM = 8;
 	public final int TIMENUM = 12;
 	public Date date = new Date();
+	
+
 	// Scanner
 	Scanner scan = new Scanner(System.in);
 
@@ -17,32 +19,60 @@ public class ScheduleServer {
 	private Day today;
 
 	// Schedule part instance
-	private ScheduleManager Schedule = new ScheduleManager();
+	private ScheduleManager Schedule;
 	private short[][] commonSchedule;
 
-	// private schedule
-	private short[][] schedule = new short[DATENUM][TIMENUM];
-	ArrayList<FixedScheduleUnit> PersonalFixedSchedule;
+	//private schedule
+	//private short[][] schedule = new short[DATENUM][TIMENUM];
+	//ArrayList<FixedScheduleUnit> PersonalFixedSchedule;
 
-	///////////////////////////////////////// Notice part
+	///////////////////////////////////////// Date part
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
+	public Day getDateDay() {
+
+		Day day = null;
+	    Calendar cal = Calendar.getInstance() ;
+
+	    int dayNum = cal.get(Calendar.DAY_OF_WEEK) ;
+	    
+	     
+	    switch(dayNum){
+	        case 1:
+	            day = Day.SUN;
+	            break ;
+	        case 2:
+	            day = Day.MON;
+	            break ;
+	        case 3:
+	            day = Day.TUE;
+	            break ;
+	        case 4:
+	            day = Day.WED;
+	            break ;
+	        case 5:
+	            day = Day.THU;
+	            break ;
+	        case 6:
+	            day = Day.FRI;
+	            break ;
+	        case 7:
+	            day = Day.SAT;
+	            break ;
+	             
+	    }
+	     
+	    return day ;
+	}
 	
 	
 	///////////////////////////////////////// Notice part
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	
 	public ScheduleServer(){		
-		for(int i = 0; Schedule.getToday() != today; i++)
-			Schedule.nextDay();
+		this.today = getDateDay();
+		Schedule = new ScheduleManager(today);
 	}
-	
-	public ScheduleServer(Day today){
-		this.today = today;
-		
-		for(int i = 0; Schedule.getToday() != today; i++)
-			Schedule.nextDay();
-	}
-	
+
 	public String getNotice() {
 		return Notice;
 	}
@@ -81,7 +111,7 @@ public class ScheduleServer {
 	//}
 	///////////////////////////////////// Schedule part
 	///////////////////////////////////// Methods///////////////////////////////////////////////////////
-	public void setcommonSchedule(String id) {
+	public void setcommonSchedule(String id, ArrayList<FixedScheduleUnit> PersonalFixedSchedule, short[][] schedule) {
 
 		int IDidx = Schedule.isIDexist(id);
 
@@ -98,5 +128,27 @@ public class ScheduleServer {
 	public void setCommonSchedule(){
 		commonSchedule = Schedule.updateTable();
 	}
+	
+	public void Screen(){
+		setCommonSchedule();
+		
+		for(int j = 0; j < TIMENUM; j++){
+		for(int i = 0; i < DATENUM; i++)
+			System.out.print(Integer.toBinaryString(commonSchedule[i][j])+" ");
+			System.out.println();
+		}
+	}
+	
+	public void ShowId(){
+		
+		for(int i = 0; i < MAXIDNUM; i++)
+			if(Schedule.getID()[i] != null)
+				System.out.println(Schedule.getID()[i]);
+	}
+	
+	public void NextDay(){
+		Schedule.nextDay();
+	}
+	
 
 }

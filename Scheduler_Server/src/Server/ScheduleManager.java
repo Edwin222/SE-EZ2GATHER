@@ -14,29 +14,44 @@ public class ScheduleManager {
 	private String ID[] = new String[MAXIDNUM];
 
 	// common schedule
-	private ArrayList<DaySchedule> commonSchedule = new ArrayList<DaySchedule>();
+	private ArrayList<DaySchedule> commonSchedule;
 	private short organizedFixedSchedule[][] = new short[DATENUM][TIMENUM];
 	private short organizedSchedule[][] = new short[DATENUM][TIMENUM];
 
 	// constructor
-	public ScheduleManager() {
-		initializing();
+	public ScheduleManager(Day today) {
+		commonSchedule = new ArrayList<DaySchedule>();
+		initializing(today);
 	}
 
-	public ScheduleManager(String id[]) {  
+	public ScheduleManager(String id[],Day today) {  
 		ID = id;
-		initializing();
+		initializing(today);
 	}
 
 	//////////////////////////////////////// initializing/////////////////////////////////////////////////////////
-	public void initializing() {
-			commonSchedule.add(new DaySchedule(Day.MON));
-			commonSchedule.add(new DaySchedule(Day.TUE));
-			commonSchedule.add(new DaySchedule(Day.WED));
-			commonSchedule.add(new DaySchedule(Day.THU));
-			commonSchedule.add(new DaySchedule(Day.FRI));
-			commonSchedule.add(new DaySchedule(Day.SAT));
-			commonSchedule.add(new DaySchedule(Day.SUN));
+	public void initializing(Day today) {	
+		int i;
+		
+		Day[] day = new Day[7];
+		
+		day[0] = Day.MON;
+		day[1] = Day.TUE;
+		day[2] = Day.WED;
+		day[3] = Day.THU;
+		day[4] = Day.FRI;
+		day[5] = Day.SAT;
+		day[6] = Day.SUN;
+		
+		for(i = 0;i < 7; i++)
+			if(day[i] == today)
+				break;
+		
+		for(int k = 0;k < 7; k++)	
+			commonSchedule.add(new DaySchedule(day[(i+k)%7]));
+			
+		
+			
 	}
 
 	////////////////////////////////////// ID part
@@ -44,7 +59,9 @@ public class ScheduleManager {
 	public int isIDexist(String id) {// check the ID is exist and return idx. if
 										// not, return -1;
 		for (int i = 0; i < MAXIDNUM; i++) {
-			if (ID[i] == id)
+			if(ID[i] == null)
+				continue;
+			if (ID[i].equals(id))
 				return i;
 		}
 		return -1;
@@ -53,7 +70,7 @@ public class ScheduleManager {
 	public int Emptyidx() {// check the IDarr and find empty space idx. if it
 							// isn't exist, return -1;
 		for (int i = 0; i < MAXIDNUM; i++) {
-			if (ID[i] == null)
+			if (ID[i]==null)
 				return i;
 		}
 		return -1;
@@ -72,10 +89,13 @@ public class ScheduleManager {
 			for (int j = 0; j < DATENUM; j++)// initializing for ID in
 												// commonFixedSchedule.
 				for (int k = 0; k < TIMENUM; k++){
+					organizedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
 					organizedFixedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
 				}
 		} else
 			System.out.println("더이상 ID를 생성할 수 없습니다.");
+		
+		updateCommonList();
 	}
 
 	public void deleteID(String id) {
@@ -118,10 +138,23 @@ public class ScheduleManager {
 			for (int j = 0; j < TIMENUM; j++)
 				if (sc[i][j] != 0)
 					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],IDidx) + (short) (1 << IDidx));
+				else
+					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],IDidx));
 	}
 
 	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx) {
-		int Fsize = fsc.size();
+		int Fsize;
+		
+		if(fsc != null)
+		 Fsize = fsc.size();
+		
+		else
+			return;
+		
+		for (int j = 0; j < DATENUM; j++)
+			for (int k = 0; k < TIMENUM; k++)
+				organizedFixedSchedule[j][k] = (short) (cleanID(organizedFixedSchedule[j][k],IDidx));
+		
 		for (int i = 0; i < Fsize; i++)
 			switch (fsc.get(i).getDay()) {
 			case MON:
@@ -150,9 +183,8 @@ public class ScheduleManager {
 			}
 	}
 
-	private void fillFixedSchedule(FixedScheduleUnit f, int Dayidx, int IDidx) {// get FixedSchedule and 
+	private void fillFixedSchedule(FixedScheduleUnit f, int Dayidx, int IDidx) {// get FixedSchedule and 		
 		for (int i = f.getBegin(); i < f.getEnd() + 1; i++){
-			
 			organizedFixedSchedule[Dayidx][i] = (short) (cleanID(organizedFixedSchedule[Dayidx][i],IDidx) + (short) (1 << IDidx));
 		}
 	}
