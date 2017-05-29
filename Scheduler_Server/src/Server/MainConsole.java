@@ -37,6 +37,9 @@ public class MainConsole {
 			case "show" : s.Screen(); break;
 			case "showID" : s.ShowId(); break;
 			case "nextDay" : s.nextDay(); break;
+			case "save" : s.saveData(); break;
+			case "clean" : s.cleanAll(); break;
+			case "load" : s.loadData(); break;
 			default :System.out.println("적절하지 않은 명령어 입니다.");
 			}
 		}

@@ -120,10 +120,42 @@ public class ScheduleManager {
 		}
 		updateCommonList();
 	}
+
+	
+	//get&set function
+	public void setID(String[] id){
+		this.ID = id;
+	}
 	
 	public String[] getID(){
 		return this.ID;
 	}
+	
+	public void setorganizedSchedule(short[][] organizedSchedule){
+		this.organizedSchedule = organizedSchedule;
+	}
+	
+	public short[][] getorganizedSchedule(){
+		return this.organizedSchedule;
+	}
+	
+	public void setorganizedFixedSchedule(short[][] organizedFixedSchedule){
+		this.organizedFixedSchedule = organizedFixedSchedule;
+	}
+	
+	public short[][] getorganizedFixedSchedule(){
+		return this.organizedFixedSchedule;
+	}
+	
+	public void setcommonSchedule(ArrayList<DaySchedule> commonSchedule){
+		this.commonSchedule = commonSchedule;
+	}
+	
+	public ArrayList<DaySchedule> getcommonSchedule(){
+		return this.commonSchedule;
+	}
+	
+	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////// Update
 	////////////////////////////////////// commonTable////////////////////////////////////////////////////////
