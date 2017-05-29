@@ -66,6 +66,7 @@ public class UserManager {
 	}
 	
 	public void saveData(){
+		
 		try {
 			FileOutputStream fp = new FileOutputStream("data.bin");
 			ObjectOutputStream op = new ObjectOutputStream(fp);
@@ -243,4 +244,5 @@ public class UserManager {
 			}
 		return people;
 	}
+	
 }
