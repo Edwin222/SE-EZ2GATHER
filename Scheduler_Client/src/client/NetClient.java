@@ -33,6 +33,8 @@ public class NetClient {
 	}
 	
 	public boolean sendMessage(String msg){
+		boolean result = false;
+		
 		try {
 			
 			DataOutputStream sock_out = new DataOutputStream(socket.getOutputStream());
@@ -41,16 +43,30 @@ public class NetClient {
 			//in & out execute
 			sock_out.writeUTF(msg);
 			
-			String cmd = sock_in.readUTF();
-			if(cmd.equals("LOGIN")){
+			if(msg.equals("LOGIN")){
 				sock_out.writeUTF(manager.getID());
 				
-				cmd = sock_in.readUTF();
-				if(cmd.equals("SUCCESS")) {
-					return true;
+				msg = sock_in.readUTF();
+				if(msg.equals("SUCCESS")) {
+
+					//load information from server
+					ObjectInputStream obj_in = new ObjectInputStream(socket.getInputStream());
+					
+					short[][] table = (short[][]) obj_in.readObject();
+					String[] idList = (String[]) obj_in.readObject();
+					
+					
+					obj_in.close();
+					
+					result = true;
 				} else {
-					return false;
+					result = false;
 				}
+				
+			} else if(msg.equals("REFRESH")){
+				
+			} else if(msg.equals("SAVE")){
+				
 			}
 			
 			sock_out.close();
@@ -60,7 +76,7 @@ public class NetClient {
 			e.printStackTrace();
 		}
 		
-		return true;
+		return result;
 	}
 	
 	public void endConnection() {

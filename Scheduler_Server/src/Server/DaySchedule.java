@@ -10,7 +10,7 @@ public class DaySchedule {
 
 	///////////////////// constructor////////////////////
 	public DaySchedule() {
-		thisDay = Day.MON;
+		this(Day.MON);
 	}
 
 	public DaySchedule(Day day) {
