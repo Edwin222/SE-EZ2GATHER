@@ -99,6 +99,7 @@ public class ScheduleManager {
 				
 		} else
 			System.out.println("���̻� ID�� ������ �� �����ϴ�.");
+
 		
 		updateCommonList();
 	}

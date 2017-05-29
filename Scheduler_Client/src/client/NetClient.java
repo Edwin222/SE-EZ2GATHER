@@ -48,7 +48,7 @@ public class NetClient {
 				
 				msg = sock_in.readUTF();
 				if(msg.equals("SUCCESS")) {
-					
+
 					//load information from server
 					ObjectInputStream obj_in = new ObjectInputStream(socket.getInputStream());
 					
@@ -62,6 +62,11 @@ public class NetClient {
 				} else {
 					result = false;
 				}
+				
+			} else if(msg.equals("REFRESH")){
+				
+			} else if(msg.equals("SAVE")){
+				
 			}
 			
 			sock_out.close();
