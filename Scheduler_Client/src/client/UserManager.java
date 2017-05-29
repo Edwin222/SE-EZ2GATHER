@@ -2,13 +2,14 @@ package client;
 
 import common.*;
 import java.util.ArrayList;
+import java.io.*;
 
 public class UserManager {
 	
 	private String ID;
 	private Day[] findDay;
 	private String[] ID_list;
-
+	private String notice;
 	//constant
 	final short BLANK = 0; //no schedule
 	final short UNFIXED = 1; //unfixed schedule
@@ -27,6 +28,7 @@ public class UserManager {
 	//table for edit
 	private short[][] temporaryTable;
 	private boolean isModified;
+	
 	
 	public UserManager(String _ID){
 		
@@ -47,6 +49,10 @@ public class UserManager {
 		return ID;
 	}
 	
+	public void setNotice(String _notice)
+	{
+		notice = _notice;
+	}
 	public short getPointOTable(int row, int col){
 		return organizedTable[row][col];
 	}
@@ -57,6 +63,33 @@ public class UserManager {
 	
 	public short getPointTTable(int row, int col){
 		return temporaryTable[row][col];
+	}
+	
+	public void saveData(){
+		try {
+			FileOutputStream fp = new FileOutputStream("data.bin");
+			ObjectOutputStream op = new ObjectOutputStream(fp);
+			
+			op.writeObject(FixedSchedule);
+			
+			op.close();
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadData(){
+		try {
+			FileInputStream fp = new FileInputStream("data.bin");
+			ObjectInputStream op = new ObjectInputStream(fp);
+			
+			FixedSchedule = ( ArrayList<FixedScheduleUnit>) op.readObject();
+			
+			op.close();
+			
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	public void add_Schedule(ScheduleUnit schedule, int start_pos, int end_pos) {
@@ -187,6 +220,7 @@ public class UserManager {
 	{
 		organizedTable = _OTable;
 	}
+	
 	public ArrayList<FixedScheduleUnit> getFixedSchedule()
 	{
 		return FixedSchedule;
