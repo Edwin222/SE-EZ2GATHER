@@ -78,6 +78,7 @@ public class NetServer {
 						} else { //login f
 							sock_out.writeUTF("FAIL");
 						}
+						
 					} else if(msg.equals("REFRESH")){
 						// REFRESH : check date & send table information
 						
