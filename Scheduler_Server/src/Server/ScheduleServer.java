@@ -9,50 +9,78 @@ public class ScheduleServer {
 	public final int MAXIDNUM = 8;
 	public final int TIMENUM = 12;
 	public Date date = new Date();
+	
+
 	// Scanner
 	Scanner scan = new Scanner(System.in);
 
 	// Notice part instance
 	private String Notice;
 	private Day today;
-
+	
 	// Schedule part instance
 	private ScheduleManager Schedule;
 	private short[][] commonSchedule;
-
-	// private schedule
-	private short[][] schedule = new short[DATENUM][TIMENUM];
-	ArrayList<FixedScheduleUnit> PersonalFixedSchedule;
-
-	///////////////////////////////////////// Notice part
-	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	
-	
-	///////////////////////////////////////// Notice part
-	///////////////////////////////////////// Methods///////////////////////////////////////////////
-	
+	//constructor
 	public ScheduleServer(){		
-		/*
-		for(int i = 0; Schedule.getToday() != today; i++)
-			Schedule.nextDay();
-		*/
-		Schedule = new ScheduleManager();
+
+		this.today = getDateDay();
+		Schedule = new ScheduleManager(today);
+
+	}
+
+	///////////////////////////////////////// Date part
+	///////////////////////////////////////// Methods///////////////////////////////////////////////
+	public Day getDateDay() {
+
+		Day day = null;
+	    Calendar cal = Calendar.getInstance() ;
+
+	    int dayNum = cal.get(Calendar.DAY_OF_WEEK) ;
+	    
+	     
+	    switch(dayNum){
+	        case 1:
+	            day = Day.SUN;
+	            break ;
+	        case 2:
+	            day = Day.MON;
+	            break ;
+	        case 3:
+	            day = Day.TUE;
+	            break ;
+	        case 4:
+	            day = Day.WED;
+	            break ;
+	        case 5:
+	            day = Day.THU;
+	            break ;
+	        case 6:
+	            day = Day.FRI;
+	            break ;
+	        case 7:
+	            day = Day.SAT;
+	            break ;
+	             
+	    }
+	     
+	    return day ;
 	}
 	
-	public ScheduleServer(Day today){
-		this.today = today;
-		
-		for(int i = 0; Schedule.getToday() != today; i++)
-			Schedule.nextDay();
-	}
 	
+
+	///////////////////////////////////////// Notice part
+	///////////////////////////////////////// Methods///////////////////////////////////////////////
+
+
 	public String getNotice() {
 		return Notice;
 	}
 
 	public boolean setNotice(String Notice) {// return if setNoice succeed.
 		if (Notice.length() > 30) {
-			System.out.println("30ÀÚ¸¦ ÃÊ°úÇÏ¼Ì½À´Ï´Ù. ´Ù½Ã ÀÔ·ÂÇÏ¿© ÁÖ½Ê½Ã¿À");
+			System.out.println("30ï¿½Ú¸ï¿½ ï¿½Ê°ï¿½ï¿½Ï¼Ì½ï¿½ï¿½Ï´ï¿½. ï¿½Ù½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¿ï¿½ ï¿½Ö½Ê½Ã¿ï¿½");
 			return false;
 		} else {
 			this.Notice = Notice;
@@ -64,13 +92,13 @@ public class ScheduleServer {
 	///////////////////////////////// ID part
 	///////////////////////////////// Methods////////////////////////////////////////////////////
 	public void makeID(String id) {
-		//String id = scan.nextLine();
 		Schedule.makeID(id);
+		updateCommonSchedule();
 	}
 
 	public void deleteID(String id) {
-		//String id = scan.nextLine();
 		Schedule.deleteID(id);
+		updateCommonSchedule();
 	}
 
 	public boolean checkID(String id){
@@ -79,27 +107,70 @@ public class ScheduleServer {
 		else return false;
 	}
 	
-	//public String IDList(){
-	//	return Schedule.getID();
-	//}
+	public String[] getIdList(){
+		return Schedule.getID();
+	}
+	
+	
 	///////////////////////////////////// Schedule part
 	///////////////////////////////////// Methods///////////////////////////////////////////////////////
-	public void setcommonSchedule(String id) {
+	public void setcommonSchedule(String id, ArrayList<FixedScheduleUnit> PersonalFixedSchedule, short[][] schedule) {
 
 		int IDidx = Schedule.isIDexist(id);
 
 		if (IDidx != -1){
 			Schedule.updateSchedule(PersonalFixedSchedule, schedule, IDidx);
 			Schedule.updateCommonList();
+			updateCommonSchedule();
 		}
 
 		else {
-			System.out.println("Á¸ÀçÇÏÁö ¾Ê´Â IDÀÔ´Ï´Ù.");
+			System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ IDï¿½Ô´Ï´ï¿½.");
 		}
 	}
 	
-	public void setCommonSchedule(){
+	public void updateCommonSchedule(){//change arrayList to 2D-array
 		commonSchedule = Schedule.updateTable();
 	}
+	
+	public short[][] getCommonSchedule(){
+		updateCommonSchedule();
+		return this.commonSchedule;
+	}
+	
+	public short[][] getPersonalSchedule(int id){
+		short tmp[][] = new short[DATENUM][TIMENUM];
+		
+		for(int i = 0; i< DATENUM; i++)
+			for(int j = 0; j < TIMENUM; j++)
+				tmp[i][j] = (short) (commonSchedule[i][j]>> id % 2);
 
+		return tmp;
+	}
+	
+	
+	public void nextDay(){
+		if(getDateDay() != today){
+			Schedule.nextDay();
+		}
+		else
+			return;
+	}
+	
+	public void Screen(){
+		
+		for(int j = 0; j < TIMENUM; j++){
+		for(int i = 0; i < DATENUM; i++)
+			System.out.print(Integer.toBinaryString(commonSchedule[i][j])+" ");
+			System.out.println();
+		}
+	}
+	
+	public void ShowId(){
+		
+		for(int i = 0; i < MAXIDNUM; i++)
+			if(Schedule.getID()[i] != null)
+				System.out.println(Schedule.getID()[i]);
+	}
+	
 }
