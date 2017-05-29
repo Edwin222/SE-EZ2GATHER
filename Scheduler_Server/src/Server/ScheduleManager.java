@@ -88,14 +88,14 @@ public class ScheduleManager {
 		
 		if (i != -1) {
 			ID[i] = id;
-/*
+
 			for (int j = 0; j < DATENUM; j++)// initializing for ID in
 												// commonFixedSchedule.
 				for (int k = 0; k < TIMENUM; k++){
 					organizedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
 					organizedFixedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
 				}
-	*/			
+				
 		} else
 			System.out.println("더이상 ID를 생성할 수 없습니다.");
 		

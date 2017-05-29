@@ -9,7 +9,7 @@ import common.FixedScheduleUnit;
 public class MainConsole {
 	
 	public static void main(String args[]){
-		
+
 		ScheduleServer s = new ScheduleServer();
 		Scanner scan = new Scanner(System.in);
 		String order;
@@ -36,13 +36,12 @@ public class MainConsole {
 			case "set" : s.setcommonSchedule(name, k2, k1); break;
 			case "show" : s.Screen(); break;
 			case "showID" : s.ShowId(); break;
-			case "nextDay" : s.NextDay(); break;
+			case "nextDay" : s.nextDay(); break;
 			default :System.out.println("적절하지 않은 명령어 입니다.");
 			}
 					
 		}
 
-		
 	}
 	
 	
