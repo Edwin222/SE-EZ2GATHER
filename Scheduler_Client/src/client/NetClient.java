@@ -55,6 +55,8 @@ public class NetClient {
 					short[][] table = (short[][]) obj_in.readObject();
 					String[] idList = (String[]) obj_in.readObject();
 					
+					manager.setOTable(table);
+					manager.setIDlist(idList);
 					
 					obj_in.close();
 					
