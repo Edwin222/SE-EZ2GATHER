@@ -42,6 +42,10 @@ public class DaySchedule {
 
 	////////////////////////////////////// edit personal
 	////////////////////////////////////// schedule///////////////////////////////////////////////
+	public void setScheduleUnit(short sc,int i) {
+		time[i] = sc;
+	}
+	
 	public void setSchedule(short sc[]) {
 		time = sc;
 	}

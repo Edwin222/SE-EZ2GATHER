@@ -87,7 +87,6 @@ public class ScheduleServer {
 			return true;
 		}
 	}
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	///////////////////////////////// ID part
 	///////////////////////////////// Methods////////////////////////////////////////////////////
@@ -138,16 +137,6 @@ public class ScheduleServer {
 		return this.commonSchedule;
 	}
 	
-	public short[][] getPersonalSchedule(int id){
-		short tmp[][] = new short[DATENUM][TIMENUM];
-		
-		for(int i = 0; i< DATENUM; i++)
-			for(int j = 0; j < TIMENUM; j++)
-				tmp[i][j] = (short) (commonSchedule[i][j]>> id % 2);
-
-		return tmp;
-	}
-	
 	
 	public void nextDay(){
 		if(getDateDay() != today){
@@ -161,7 +150,7 @@ public class ScheduleServer {
 		
 		for(int j = 0; j < TIMENUM; j++){
 		for(int i = 0; i < DATENUM; i++)
-			System.out.print(Integer.toBinaryString(commonSchedule[i][j])+" ");
+			System.out.print(Integer.toBinaryString(commonSchedule[j][i])+" ");
 			System.out.println();
 		}
 	}
