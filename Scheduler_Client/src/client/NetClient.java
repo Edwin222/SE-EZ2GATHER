@@ -16,6 +16,7 @@ public class NetClient {
 		this.port = port;
 		
 		manager = new UserManager(ID);
+		manager.loadData();
 	}
 	
 	public UserManager getManager(){
@@ -43,7 +44,7 @@ public class NetClient {
 			//in & out execute
 			sock_out.writeUTF(msg);
 			
-			if(msg.equals("LOGIN")){
+			if(msg.equals("LOGIN") || msg.equals("REFRESH")){
 				sock_out.writeUTF(manager.getID());
 				
 				msg = sock_in.readUTF();
@@ -54,9 +55,11 @@ public class NetClient {
 					
 					short[][] table = (short[][]) obj_in.readObject();
 					String[] idList = (String[]) obj_in.readObject();
+					String notice = sock_in.readUTF();
 					
 					manager.setOTable(table);
 					manager.setIDlist(idList);
+					manager.setNotice(notice);
 					
 					obj_in.close();
 					
@@ -65,10 +68,35 @@ public class NetClient {
 					result = false;
 				}
 				
-			} else if(msg.equals("REFRESH")){
-				
 			} else if(msg.equals("SAVE")){
+				sock_out.writeUTF(manager.getID());
 				
+				msg = sock_in.readUTF();
+				if(msg.equals("SUCCESS")){
+					
+					ObjectOutputStream obj_out = new ObjectOutputStream(socket.getOutputStream());
+					
+					obj_out.writeObject(manager.getFixedSchedule());
+					obj_out.writeObject(manager.getPTable());
+					
+					obj_out.close();
+					
+					ObjectInputStream obj_in = new ObjectInputStream(socket.getInputStream());
+					
+					short[][] table = (short[][]) obj_in.readObject();
+					String[] idList = (String[]) obj_in.readObject();
+					String notice = sock_in.readUTF();
+					
+					manager.setOTable(table);
+					manager.setIDlist(idList);
+					manager.setNotice(notice);
+					
+					obj_in.close();
+					
+					result = true;
+				} else {
+					result = false;
+				}
 			}
 			
 			sock_out.close();
@@ -84,6 +112,7 @@ public class NetClient {
 	public void endConnection() {
 		try {
 			socket.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

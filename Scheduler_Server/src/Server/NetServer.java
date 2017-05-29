@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
 
+import common.*;
+
+import java.util.ArrayList;
 
 public class NetServer {
 	
@@ -59,8 +62,8 @@ public class NetServer {
 					//in & out execute
 					String msg = sock_in.readUTF();
 					
-					if(msg.equals("LOGIN")){
-						// LOGIN : check date & send table information						
+					if(msg.equals("LOGIN") || msg.equals("REFRESH")){
+						// LOGIN & REFRESH : check date & send table information						
 
 						String ID = sock_in.readUTF();
 						
@@ -72,18 +75,43 @@ public class NetServer {
 							
 							obj_out.writeObject(sServer.getCommonSchedule());
 							obj_out.writeObject(sServer.getIdList());
+							sock_out.writeUTF(sServer.getNotice());
 							
 							obj_out.close();
 							
 						} else { //login f
 							sock_out.writeUTF("FAIL");
 						}
-						
-					} else if(msg.equals("REFRESH")){
-						// REFRESH : check date & send table information
-						
+					
 					} else if(msg.equals("SAVE")){
 						// SAVE : check date & modify table information & send table information
+						
+						String ID = sock_in.readUTF();
+						
+						if(sServer.checkID(ID)){
+							sock_out.writeUTF("SUCCESS");
+							
+							ObjectInputStream obj_in = new ObjectInputStream(client_socket.getInputStream());
+							ArrayList<FixedScheduleUnit> fsu = (ArrayList<FixedScheduleUnit>) obj_in.readObject();
+							short[][] sch = (short[][]) obj_in.readObject();
+							
+							sServer.setcommonSchedule(ID, fsu, sch);
+							
+							obj_in.close();
+							
+							sServer.nextDay();
+							
+							ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
+							
+							obj_out.writeObject(sServer.getCommonSchedule());
+							obj_out.writeObject(sServer.getIdList());
+							sock_out.writeUTF(sServer.getNotice());
+							
+							obj_out.close();
+							
+						} else {
+							sock_out.writeUTF("FAIL");
+						}
 						
 					}
 					
