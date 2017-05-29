@@ -77,26 +77,31 @@ public class ScheduleManager {
 	}
 
 	public void makeID(String id) {// Check the ID is exist and add ID in blank
-									// idx.
+				// idx.
+
 		if (isIDexist(id) != -1) {
 			System.out.println("이미 존재하는 ID입니다.");
 			return;
 		}
+		
 		int i = Emptyidx();
+		
 		if (i != -1) {
 			ID[i] = id;
-
+/*
 			for (int j = 0; j < DATENUM; j++)// initializing for ID in
 												// commonFixedSchedule.
 				for (int k = 0; k < TIMENUM; k++){
 					organizedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
 					organizedFixedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
 				}
+	*/			
 		} else
 			System.out.println("더이상 ID를 생성할 수 없습니다.");
 		
 		updateCommonList();
 	}
+	
 
 	public void deleteID(String id) {
 		int IDNUM = isIDexist(id);

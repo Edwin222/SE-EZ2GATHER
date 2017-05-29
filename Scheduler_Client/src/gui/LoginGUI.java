@@ -143,23 +143,23 @@ public class LoginGUI {
 		
 		return empty;
 	}
-	public void clickLogin() { //login을 눌렀을 때
+	public void clickLogin() { //login�쓣 �닃���쓣 �븣
 		IP = text_IP.getText();
 		PORT = text_PORT.getText();
 		ID = text_ID.getText();
 		
-		if (empty())		//IP또는 PORT또는 ID창이 비었을 때
+		if (empty())		//IP�삉�뒗 PORT�삉�뒗 ID李쎌씠 鍮꾩뿀�쓣 �븣
 			JOptionPane.showMessageDialog(null, "Please enter IP, PORT or ID", "error", JOptionPane.OK_OPTION);
 		
 		else {
 			boolean login;
 			frmEzgather.dispose();
-			//NetClient netClient = new NetClient(IP, Integer.parseInt(PORT), ID);
-			//netClient.connectToServer();
-			//login = netClient.sendMessage("LOGIN");
+			NetClient netClient = new NetClient(IP, Integer.parseInt(PORT), ID);
+			netClient.connectToServer();
+			login = netClient.sendMessage("LOGIN");
 			//request login to client
 			
-			if (/*!login*/false) {	//login F
+			if (login) {	//login F
 				try {
 					LoginGUI window = new LoginGUI();
 					window.frmEzgather.setVisible(true);
