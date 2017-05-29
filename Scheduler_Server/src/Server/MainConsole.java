@@ -39,7 +39,6 @@ public class MainConsole {
 			case "nextDay" : s.nextDay(); break;
 			default :System.out.println("적절하지 않은 명령어 입니다.");
 			}
-					
 		}
 	}
 	

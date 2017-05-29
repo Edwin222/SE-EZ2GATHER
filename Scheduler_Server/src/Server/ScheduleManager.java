@@ -25,6 +25,7 @@ public class ScheduleManager {
 	}
 
 	public ScheduleManager(String id[],Day today) {  
+		commonSchedule = new ArrayList<DaySchedule>();
 		ID = id;
 		initializing(today);
 	}
@@ -116,12 +117,9 @@ public class ScheduleManager {
 				for(int j = 0 ; j < TIMENUM; j++){
 					organizedSchedule[i][j] = cleanID(organizedSchedule[i][j],IDNUM);
 					organizedFixedSchedule[i][j] = cleanID(organizedFixedSchedule[i][j],IDNUM);
-					updateCommonList();
 				}
-					
-			
-			
 		}
+		updateCommonList();
 	}
 	
 	public String[] getID(){
@@ -145,6 +143,8 @@ public class ScheduleManager {
 					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],IDidx) + (short) (1 << IDidx));
 				else
 					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],IDidx));
+
+		updateCommonList();
 	}
 
 	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx) {
