@@ -80,14 +80,13 @@ public class ScheduleServer {
 
 	public boolean setNotice(String Notice) {// return if setNoice succeed.
 		if (Notice.length() > 30) {
-			System.out.println("30�ڸ� �ʰ��ϼ̽��ϴ�. �ٽ� �Է��Ͽ� �ֽʽÿ�");
+			System.out.println("input less than 30 letters");
 			return false;
 		} else {
 			this.Notice = Notice;
 			return true;
 		}
 	}
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	///////////////////////////////// ID part
 	///////////////////////////////// Methods////////////////////////////////////////////////////
@@ -125,7 +124,7 @@ public class ScheduleServer {
 		}
 
 		else {
-			System.out.println("�������� �ʴ� ID�Դϴ�.");
+			System.out.println("not exist ID.");
 		}
 	}
 	
@@ -136,16 +135,6 @@ public class ScheduleServer {
 	public short[][] getCommonSchedule(){
 		updateCommonSchedule();
 		return this.commonSchedule;
-	}
-	
-	public short[][] getPersonalSchedule(int id){
-		short tmp[][] = new short[DATENUM][TIMENUM];
-		
-		for(int i = 0; i< DATENUM; i++)
-			for(int j = 0; j < TIMENUM; j++)
-				tmp[i][j] = (short) (commonSchedule[i][j]>> id % 2);
-
-		return tmp;
 	}
 	
 	
@@ -161,7 +150,7 @@ public class ScheduleServer {
 		
 		for(int j = 0; j < TIMENUM; j++){
 		for(int i = 0; i < DATENUM; i++)
-			System.out.print(Integer.toBinaryString(commonSchedule[i][j])+" ");
+			System.out.print(Integer.toBinaryString(commonSchedule[j][i])+" ");
 			System.out.println();
 		}
 	}

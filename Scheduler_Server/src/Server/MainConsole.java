@@ -14,8 +14,8 @@ public class MainConsole {
 		Scanner scan = new Scanner(System.in);
 		String order;
 		String name;
-		short[][] k1 = {{0,1,1,2,0,1,0,1,2,0,1,0},{0,1,1,0,0,1,0,1,0,1,1,0},{0,1,0,2,2,1,0,1,2,0,1,0},{0,1,1,2,1,1,0,1,2,0,1,0},{1,1,1,2,1,1,1,1,2,1,1,1},{0,1,1,2,0,1,0,1,2,0,1,0}
-		,{0,1,1,2,0,1,0,1,2,0,1,0}};
+		short[][] k1 = {{1,0,0,1,0,1,1},{1,0,0,1,0,1,1},{1,0,0,1,0,1,1},{1,0,0,0,1,1,1},{1,0,0,1,0,1,1},{1,0,0,1,0,1,1},{1,0,0,1,0,1,1},
+				{1,0,0,1,0,1,1},{1,0,0,1,0,1,1},{1,0,0,1,0,1,1},{1,0,0,1,0,0,1},{1,0,0,1,0,1,1}};
 		ArrayList<FixedScheduleUnit> k2 = new ArrayList<FixedScheduleUnit>();
 		k2.add(new FixedScheduleUnit(0,2,Day.MON));
 		k2.add(new FixedScheduleUnit(2,8,Day.TUE));
