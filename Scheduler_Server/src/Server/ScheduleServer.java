@@ -158,7 +158,6 @@ public class ScheduleServer {
 	}
 	
 	public void Screen(){
-	//	updateCommonSchedule();
 		
 		for(int j = 0; j < TIMENUM; j++){
 		for(int i = 0; i < DATENUM; i++)
@@ -174,10 +173,4 @@ public class ScheduleServer {
 				System.out.println(Schedule.getID()[i]);
 	}
 	
-	
-	
-	
-	
-	
-
 }
