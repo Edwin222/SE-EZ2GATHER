@@ -21,6 +21,8 @@ public class SchedulerGUI {
 	private NetClient netClient;
 	private JFrame frame;
 	private Image cell, time, today, renewal, setting;
+	private Image p[] = new Image[9];
+	private int personNumber = 5;//netClient.getPerson_Number();
 	/**
 	 * Launch the application.
 	 */
@@ -114,7 +116,24 @@ public class SchedulerGUI {
 			g.drawImage(renewal, 0, 0, 20, 20, this);
 		}
 	}
-	
+	class PersonComponent extends JComponent {
+		Toolkit tkit;
+		public void paintComponent(Graphics g) {
+			tkit = tkit.getDefaultToolkit();
+			
+			for (int i = 1; i <= personNumber; i++) {
+				String ident = String.format("%s%d%s", "resource/p", i, ".png");
+				p[i] = tkit.getImage(SchedulerGUI.class.getResource(ident));
+			}
+			super.paintComponent(g);
+			for (int i = 0; i < personNumber; i++) {
+				g.drawImage(p[i], 0, i * 5, 5, 5, this);
+				JTextPane nameTextPane = new JTextPane();
+			}
+			g.drawImage(p[1], 0, 0, 5, 5, this);
+			
+		}
+	}
 	class RefreshClick implements MouseListener {
 
 		@Override
