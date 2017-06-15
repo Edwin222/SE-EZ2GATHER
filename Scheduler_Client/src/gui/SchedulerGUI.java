@@ -73,7 +73,7 @@ public class SchedulerGUI {
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
-		textPane.setText("공지");
+		textPane.setText("怨듭�");
 		textPane.setBounds(200, 17, 500, 25);
 		frame.getContentPane().add(textPane);
 		panel.setVisible(true);
@@ -104,6 +104,7 @@ public class SchedulerGUI {
 			g.drawImage(renewal, 0, 0, 20, 20, this);
 		}
 	}
+	
 	class SettingComponent extends JComponent {
 		Toolkit tkit;
 		public void paintComponent(Graphics g) {
