@@ -110,6 +110,8 @@ public class SettingGUI {
 		frame.getContentPane().add(saveComp);
 		frame.getContentPane().add(exitComp);
 		frame.getContentPane().add(cellComp);
+		frame.getContentPane().setComponentZOrder(cellComp, 0);
+		frame.getContentPane().setComponentZOrder(panel, 2);
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
@@ -284,9 +286,11 @@ public class SettingGUI {
 			super.paintComponent(g);
 			//g.drawImage(cell, 0, 0, width, height, this);
 			
+			g.drawImage(dragBox, start_x, start_y, checked_width*(part_width), checked_height*(part_height), this);	
 			addMouseListener(this);
 			addMouseMotionListener(this);
 		}
+		
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
@@ -320,7 +324,6 @@ public class SettingGUI {
 			
 			ImageProducer filteredImgProd = new FilteredImageSource(box.getSource(), filter);
 			dragBox = tkit.createImage(filteredImgProd);
-			
 		}
 		
 		@Override
@@ -331,34 +334,35 @@ public class SettingGUI {
 			int x = arg0.getX();
 			int y = arg0.getY();
 			
-			if( x > (checked_width*part_width) + (int)(part_width * 0.6) ){
+			if( x > start_x + (checked_width*part_width) + (int)(part_width * 0.6) ){
 				checked_width++;
 				changed = true;
 			} 
-			else if ( x < (checked_width*part_width) - (int)(part_width * 0.4)){
+			else if ( x < start_x + (checked_width*part_width) - (int)(part_width * 0.4)){
 				checked_width--;
 				changed = true;
 			}
 			
-			if(y > (checked_height*part_height) + (int)(part_height * 0.6) ) {
+			if(y > start_y + (checked_height*part_height) + (int)(part_height * 0.6) ) {
 				checked_height++;
 				changed = true;
 			} 
-			else if ( y < (checked_height*part_height) - (int)(part_height * 0.4)){
+			else if ( y < start_y + (checked_height*part_height) - (int)(part_height * 0.4)){
 				checked_height--;
 				changed = true;
 			}
 			
 			if(changed){
-				Graphics g = getGraphics();
-				g.drawImage(dragBox, start_x, start_y, checked_width*(part_width), checked_height*(part_height), this);	
-				
+				this.setVisible(false);
+				this.setVisible(true);
 			}
 		}
 		
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
+			checked_width = 0;
+			checked_height = 0;
 			this.setVisible(false);
 			this.setVisible(true);
 		}
