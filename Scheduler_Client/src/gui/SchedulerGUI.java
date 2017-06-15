@@ -73,7 +73,7 @@ public class SchedulerGUI {
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
-		textPane.setText("怨듭�");
+		textPane.setText("공지사항 받아와서 출력하기");
 		textPane.setBounds(200, 17, 500, 25);
 		frame.getContentPane().add(textPane);
 		panel.setVisible(true);
@@ -114,6 +114,7 @@ public class SchedulerGUI {
 			g.drawImage(renewal, 0, 0, 20, 20, this);
 		}
 	}
+	
 	class RefreshClick implements MouseListener {
 
 		@Override
