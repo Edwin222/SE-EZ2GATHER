@@ -4,13 +4,17 @@ import java.io.Serializable;
 
 import common.*;
 
+//class 설명
+//Day와 time 정보를 가지고 있으며 ScheduleManager애서 ArrayList로 구현 되어있다.
+//날짜가 바뀌면 ScheduleManager애있는 nextDay method이용 List내 날짜를 바꾼다.
+
 public class DaySchedule implements Serializable{
 
 	private Day thisDay;
 
 	private short time[] = new short[12];
 
-	///////////////////// constructor////////////////////
+	//constructor
 	public DaySchedule() {
 		this(Day.MON);
 	}
@@ -23,9 +27,8 @@ public class DaySchedule implements Serializable{
 		thisDay = day;
 		this.time = time;
 	}
-	//////////////////////////////////////////////////////
 
-	/////////// edit Day///////////////////////////
+	//edit Day
 	public Day getDay() {
 		return thisDay;
 	}
@@ -33,17 +36,8 @@ public class DaySchedule implements Serializable{
 	public void setDay(Day day) {
 		thisDay = day;
 	}
-	//////////////////////////////////////////////
 
-	/////////// create New ID/////////////////////////////////
-	public void newID(int i) {// if new ID is created, we should initialize that
-								// idx.
-		for (int k = 0; k < 12; k++)
-			time[k] = (short) (time[k] + (1 << i));
-	}
-
-	////////////////////////////////////// edit personal
-	////////////////////////////////////// schedule///////////////////////////////////////////////
+	//edit personal schedule
 	public void setScheduleUnit(short sc,int i) {
 		time[i] = sc;
 	}
@@ -56,37 +50,3 @@ public class DaySchedule implements Serializable{
 		return time;
 	}
 }
-
-/*
- * ////////////////////////edit Fixed
- * schedule////////////////////////////////////////////////////////////// public
- * void addSchedule(int ID, ScheduleUnit table){//get ID idx as int, and
- * FixedScheduleUnit table.
- * 
- * short idx = 1;
- * 
- * idx = (short) (idx << ID);
- * 
- * for(int i = table.getBegin(); i <= table.getEnd();){
- * 
- * if(time[i]%idx == 1)//check the ID has same time schedule. continue;
- * 
- * else time[i] = (short) (time[i] + idx);
- * 
- * i++; } }
- * 
- * public void DeleteSchedule(int ID, ScheduleUnit table){
- * 
- * short idx = 1;
- * 
- * idx = (short) (idx << ID);
- * 
- * for(int i = table.getBegin(); i <= table.getEnd();){
- * 
- * if(time[i]%idx != 1)// check whether the ID has that time schedule or not.
- * continue;
- * 
- * else time[i] = (short) (time[i] - idx); i++; } }
- * /////////////////////////////////////////////////////////////////////////////
- * //////////////////////////////
- */

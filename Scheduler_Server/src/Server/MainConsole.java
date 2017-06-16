@@ -35,6 +35,11 @@ public class MainConsole {
 					name = name + " " + st.nextToken();
 				}
 				s.setNotice(name); break;
+			case "printID" : s.ShowId(); break;
+			case "help" : 	System.out.println("add <IDNAME> : add ID to IDLIST");
+							System.out.println("delete <IDNAME> : delete ID from IDLIST");
+							System.out.println("notice <NOTICE CONTENT> : set NOTICE");
+							System.out.println("printID : print ID names in IDLIST ");
 			default :
 				System.out.println("잘못된 입력입니다.");
 			}
@@ -48,7 +53,7 @@ case "checkID" : if(s.checkID(name)) System.out.println(name); else System.out.p
 case "checkNT" : System.out.println(s.getNotice()); break;
 case "set" : s.setcommonSchedule(name, k2, k1); break;
 case "show" : s.Screen(); break;
-case "showID" : s.ShowId(); break;
+case "printID" : s.ShowId(); break;
 case "nextDay" : s.nextDay(); break;
 case "save" : s.saveData(); break;
 case "clean" : s.cleanAll(); break;

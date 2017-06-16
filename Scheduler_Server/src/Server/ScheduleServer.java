@@ -12,9 +12,6 @@ public class ScheduleServer {
 	public final int DATENUM = 7;
 	public final int MAXIDNUM = 8;
 	public final int TIMENUM = 12;
-	public Date date = new Date();
-	
-
 	// Scanner
 	Scanner scan = new Scanner(System.in);
 
@@ -34,9 +31,13 @@ public class ScheduleServer {
 
 	}
 	
-	///////////////////////////////////////// Date part
-	///////////////////////////////////////// Methods///////////////////////////////////////////////
-	public Day getDateDay() {
+	/****************************************************************************************/
+	/* getDateDay    					   													*/
+	/* input : none														 					*/
+	/* process :	오늘날짜정보를 이용하여 Day type을 찾기.											*/
+	/* return : 오늘날짜의 Day type								  								*/
+	/****************************************************************************************/
+	private Day getDateDay() {// find today.
 
 		Day day = null;
 	    Calendar cal = Calendar.getInstance() ;
@@ -74,9 +75,7 @@ public class ScheduleServer {
 	
 	
 
-	///////////////////////////////////////// Notice part
-	///////////////////////////////////////// Methods///////////////////////////////////////////////
-
+	//Notice part methods
 
 	public String getNotice() {
 		return Notice;
@@ -92,8 +91,7 @@ public class ScheduleServer {
 		}
 	}
 
-	///////////////////////////////// ID part
-	///////////////////////////////// Methods////////////////////////////////////////////////////
+	//ID part methods
 	public void makeID(String id) {
 		Schedule.makeID(id);
 		updateCommonSchedule();
@@ -104,17 +102,11 @@ public class ScheduleServer {
 		updateCommonSchedule();
 	}
 
-	public boolean checkID(String id){
-		if(Schedule.isIDexist(id) != -1)
-			return true;
-		else return false;
-	}
-	
 	public String[] getIdList(){
 		return Schedule.getID();
 	}
 	
-	public int personNum(){
+	public int personNum(){//return the number of enrolled people.
 		int num = 0;
 		for(int i = 0; i < MAXIDNUM ; i++)
 			if(Schedule.getID()[i] != null)
@@ -122,8 +114,7 @@ public class ScheduleServer {
 		return num;
 	}
 	
-	///////////////////////////////////// Schedule part
-	///////////////////////////////////// Methods///////////////////////////////////////////////////////
+	//Schedule part methods
 	public void setcommonSchedule(String id, ArrayList<FixedScheduleUnit> PersonalFixedSchedule, short[][] schedule) {
 
 		int IDidx = Schedule.isIDexist(id);
@@ -149,40 +140,13 @@ public class ScheduleServer {
 	}
 	
 	
-	public void nextDay(){
+	public void nextDay(){//
 		if(getDateDay() != today){
 			Schedule.nextDay();
 		}
 		else
 			return;
 	}
-	
-	
-	public void Screen(){
-		
-		for(int j = 0; j < TIMENUM; j++){
-		for(int i = 0; i < DATENUM; i++)
-			System.out.print(Integer.toBinaryString(commonSchedule[j][i])+" ");
-			System.out.println();
-		}
-	}
-	
-	public void ShowId(){
-		
-		for(int i = 0; i < MAXIDNUM; i++)
-			if(Schedule.getID()[i] != null)
-				System.out.println(Schedule.getID()[i]);
-	}
-	
-	//clean ALL
-	   public void cleanAll(){
-		   	Schedule.setID(null);
-	        Schedule.setcommonSchedule(null);
-	        Schedule.setorganizedFixedSchedule(null);
-	        Schedule.setorganizedSchedule(null);
-	        commonSchedule = null;
-	         
-	   }
 	
 	//functions related with file
 	   public void saveData(){
@@ -219,7 +183,39 @@ public class ScheduleServer {
 		         e.printStackTrace();
 		      }
 		   }
-		   
-	
+	   
+	   /*
+	    * methods for check if methods are successfully operated. 
+	    */
+		public void Screen(){ // print current Table
+			
+			for(int j = 0; j < TIMENUM; j++){
+			for(int i = 0; i < DATENUM; i++)
+				System.out.print(Integer.toBinaryString(commonSchedule[j][i])+" ");
+				System.out.println();
+			}
+		}
+		
+		public void ShowId(){ //print current ID list.
+			
+			for(int i = 0; i < MAXIDNUM; i++)
+				if(Schedule.getID()[i] != null)
+					System.out.println(Schedule.getID()[i]);
+		}
+		
+	    public void cleanAll(){
+			   	Schedule.setID(null);
+		        Schedule.setcommonSchedule(null);
+		        Schedule.setorganizedFixedSchedule(null);
+		        Schedule.setorganizedSchedule(null);
+		        commonSchedule = null;
+		}
+
+		public boolean checkID(String id){
+				if(Schedule.isIDexist(id) != -1)
+					return true;
+				else return false;
+		}
+			
 }
 

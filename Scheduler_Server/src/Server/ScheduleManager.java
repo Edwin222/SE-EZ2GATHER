@@ -8,7 +8,6 @@ public class ScheduleManager {
 	public final int DATENUM = 7;
 	public final int MAXIDNUM = 8;
 	public final int TIMENUM = 12;
-	// Object instance
 
 	// IDpart instance
 	private String ID[] = new String[MAXIDNUM];
@@ -30,8 +29,13 @@ public class ScheduleManager {
 		initializing(today);
 	}
 
-	//////////////////////////////////////// initializing/////////////////////////////////////////////////////////
-	public void initializing(Day today) {	
+	/**************************************************************/
+	/* initializing                       					      */
+	/* input : Day type 변수                   							  */
+	/* process : 현재날짜의 Day type을 받아 commonSchdule을 생성                  */
+	/* return : none                     						  */
+	/**************************************************************/
+	public void initializing(Day today) {	// check today's day and initialize depends on it.
 		int i;
 		
 		Day[] day = new Day[7];
@@ -53,9 +57,14 @@ public class ScheduleManager {
 			
 	}
  
-	//ID part method
-	public int isIDexist(String id) {// check the ID is exist and return idx. if
-										// not, return -1;
+	/**************************************************************/
+	/* isIDexist         		           					      */
+	/* input : id string값                   							  */
+	/* process : id를 받아 현재 idList내애 있는지 확인	                  */
+	/* return : idList애 있으면 id의 idx값, 없으면 -1반환				  */
+	/**************************************************************/
+	public int isIDexist(String id) {// check the ID is exist and return idx. if not, return -1;
+										
 		for (int i = 0; i < MAXIDNUM; i++) {
 			if(ID[i] == null)
 				continue;
@@ -65,8 +74,14 @@ public class ScheduleManager {
 		return -1;
 	}
 
-	public int Emptyidx() {// check the IDarr and find empty space idx. if it
-							// isn't exist, return -1;
+	/**************************************************************/
+	/* Emptyidx		       		           					      */
+	/* input : none                   							  */
+	/* process : idList애 비어있는 idx가 있는지 확인	                  */
+	/* return : 비어있는 idx가 있으면 idx값, 없으면 -1반환				  */
+	/**************************************************************/
+	public int Emptyidx() {// check the IDarr and find empty space idx. if it isn't exist, return -1;
+						
 		for (int i = 0; i < MAXIDNUM; i++) {
 			if (ID[i]==null)
 				return i;
@@ -92,8 +107,7 @@ public class ScheduleManager {
 		if (i != -1) {
 			ID[i] = id;
 
-			for (int j = 0; j < TIMENUM; j++)// initializing for ID in
-												// commonFixedSchedule.
+			for (int j = 0; j < TIMENUM; j++)// initializing for ID in commonFixedSchedule.
 				for (int k = 0; k < DATENUM; k++){
 					organizedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
 					organizedFixedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
@@ -164,7 +178,7 @@ public class ScheduleManager {
 	
 	//update commonTable
 	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx) {// get ID idx and sc table. 
-																						   //update organizedFixedSchedule and organizedSchedule.
+																						   // update organizedFixedSchedule and organizedSchedule.
 																								 
 		updateFixedSchedule(fsc, IDidx);
 
@@ -244,7 +258,7 @@ public class ScheduleManager {
 	 
 
 	  // update commonList
-	public void updateCommonList() {////////////// find commonSchedule's day and set proper table.
+	public void updateCommonList() {//find commonSchedule's day and set proper table.
 		for (int i = 0; i < DATENUM; i++)
 			for(int j = 0; j < TIMENUM; j++)
 			switch (commonSchedule.get(i).getDay()) {
@@ -274,11 +288,9 @@ public class ScheduleManager {
 			}
 	}
 
-	//////////////////////////////// make Updated table(List -> newTa
-	//////////////////////////////// Table)///////////////////////////////////////////////////////////
-	public short[][] updateTable() {// let the commonSchedule's schedule copy in
-									// tmptable and return to make
-									// updatedSchedule(edited day.)
+	//make Updated table(List -> newTable)
+	public short[][] updateTable() {// let the commonSchedule's schedule copy in tmptable and return to make updatedSchedule(edited day.)
+		
 		short tmptable[][] = new short[TIMENUM][DATENUM];
 
 		for (int i = 0; i < TIMENUM; i++)
@@ -288,8 +300,7 @@ public class ScheduleManager {
 		return tmptable;
 	}
 	
-	///////////////////////////// make commonSchedule next day
-
+	// make commonSchedule next day
 	public void nextDay(){
 		
 		for(int i = 0; i < TIMENUM ; i++)
