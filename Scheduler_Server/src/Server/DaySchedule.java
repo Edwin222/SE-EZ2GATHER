@@ -1,8 +1,10 @@
 package Server;
 
+import java.io.Serializable;
+
 import common.*;
 
-public class DaySchedule {
+public class DaySchedule implements Serializable{
 
 	private Day thisDay;
 

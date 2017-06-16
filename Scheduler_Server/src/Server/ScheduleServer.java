@@ -1,5 +1,9 @@
 package Server;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import common.Day;
 import common.FixedScheduleUnit;
@@ -29,7 +33,7 @@ public class ScheduleServer {
 		Schedule = new ScheduleManager(today);
 
 	}
-
+	
 	///////////////////////////////////////// Date part
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	public Day getDateDay() {
@@ -110,6 +114,13 @@ public class ScheduleServer {
 		return Schedule.getID();
 	}
 	
+	public int personNum(){
+		int num = 0;
+		for(int i = 0; i < MAXIDNUM ; i++)
+			if(Schedule.getID()[i] != null)
+				num++;
+		return num;
+	}
 	
 	///////////////////////////////////// Schedule part
 	///////////////////////////////////// Methods///////////////////////////////////////////////////////
@@ -146,6 +157,7 @@ public class ScheduleServer {
 			return;
 	}
 	
+	
 	public void Screen(){
 		
 		for(int j = 0; j < TIMENUM; j++){
@@ -161,6 +173,53 @@ public class ScheduleServer {
 			if(Schedule.getID()[i] != null)
 				System.out.println(Schedule.getID()[i]);
 	}
+	
+	//clean ALL
+	   public void cleanAll(){
+		   	Schedule.setID(null);
+	        Schedule.setcommonSchedule(null);
+	        Schedule.setorganizedFixedSchedule(null);
+	        Schedule.setorganizedSchedule(null);
+	        commonSchedule = null;
+	         
+	   }
+	
+	//functions related with file
+	   public void saveData(){
+		      try {
+		         FileOutputStream fp = new FileOutputStream("data.bin");
+		         ObjectOutputStream op = new ObjectOutputStream(fp);
+		         
+		         op.writeObject(Schedule.getID());
+		         op.writeObject(Schedule.getcommonSchedule());
+		         op.writeObject(Schedule.getorganizedFixedSchedule());
+		         op.writeObject(Schedule.getorganizedSchedule());
+		         op.writeObject(this.commonSchedule);
+		         
+		         op.close();
+		      } catch(Exception e){
+		         e.printStackTrace();
+		      }
+		   }
+		   
+	   public void loadData(){
+		      try {
+		         FileInputStream fp = new FileInputStream("data.bin");
+		         ObjectInputStream op = new ObjectInputStream(fp);
+		         
+		         Schedule.setID((String[]) op.readObject());
+		         Schedule.setcommonSchedule((ArrayList<DaySchedule>) op.readObject());
+		         Schedule.setorganizedFixedSchedule((short[][]) op.readObject());
+		         Schedule.setorganizedSchedule((short[][]) op.readObject());
+		         commonSchedule = (short[][]) op.readObject();
+		         
+		         op.close();
+		         
+		      } catch(Exception e){
+		         e.printStackTrace();
+		      }
+		   }
+		   
 	
 }
 

@@ -152,11 +152,11 @@ public class LoginGUI {
 			JOptionPane.showMessageDialog(null, "Please enter IP, PORT or ID", "error", JOptionPane.OK_OPTION);
 		
 		else {
-			boolean login;
+			boolean login = false;
 			frmEzgather.dispose();
-			NetClient netClient = new NetClient(IP, Integer.parseInt(PORT), ID);
-			netClient.connectToServer();
-			login = netClient.sendMessage("LOGIN");
+			//NetClient netClient = new NetClient(IP, Integer.parseInt(PORT), ID);
+			//netClient.connectToServer();
+			//login = netClient.sendMessage("LOGIN");
 			//request login to client
 			
 			if (login) {	//login F
