@@ -125,7 +125,7 @@ public class UserManager {
 	
 	public void add_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) {
 		
-		//°³ÀÎ ½ºÄÉÁÙ¸ñ·Ï¿¡ ´õÇÏ±â
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		int begin_time = schedule.getBegin();
 		int end_time = schedule.getEnd();
 		
@@ -136,14 +136,14 @@ public class UserManager {
 			}
 		}
 		
-		FixedSchedule.add(schedule); //°íÁ¤½ºÄÉÁÙ¸ñ·Ï¿¡ ´õÇÏ±â
+		FixedSchedule.add(schedule); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 		isModified = true;
 		
 	}
 	
 	public void remove_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) 
 	{	
-		//°³ÀÎ ½ºÄÉÁÙ¸ñ·Ï¿¡ »©±â
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½
 		int begin_time = schedule.getBegin();
 		int end_time = schedule.getEnd();
 		
@@ -177,7 +177,7 @@ public class UserManager {
 		isModified = true;
 	}
 	
-	public void save() { //º¯°æµÈ ½ºÄÉÁÙÅ×ÀÌºíÀ» ÇöÀç Å×ÀÌºí¿¡ µ¤¾î¾º¿î´Ù
+	public void save() { //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½î¾ºï¿½ï¿½ï¿½
 
 		personalTable = temporaryTable;
 		
@@ -238,10 +238,10 @@ public class UserManager {
 	public ArrayList<Integer> show_organized_table(int i, int j)
 	{
 		for(int k=0; k<ID_list.length; k++)
-			{
-				if(check_schedule((organizedTable[i][j]), k))
-					people.add(k);
-			}
+		{
+			if(check_schedule((organizedTable[i][j]), k))
+				people.add(k);
+		}
 		return people;
 	}
 	
