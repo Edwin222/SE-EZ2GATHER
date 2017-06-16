@@ -3,6 +3,7 @@ package client;
 import common.*;
 import java.util.ArrayList;
 import java.io.*;
+//1 : 시간이 되는거, 0 : 안되는가
 
 public class UserManager {
 	
@@ -15,6 +16,9 @@ public class UserManager {
 	final short BLANK = 0; //no schedule
 	final short UNFIXED = 1; //unfixed schedule
 	final short FIXED = 2; //fixed schedule
+	
+	final short avail = 1;
+	final short unavail = 0;
 	
 	final short COL = 7;
 	final short ROW = 12;
@@ -49,6 +53,7 @@ public class UserManager {
 	{
 		return ID;
 	}
+	
 	
 	public void setNotice(String _notice)
 	{
@@ -134,20 +139,39 @@ public class UserManager {
 	
 	public void add_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) {
 		
+<<<<<<< HEAD
 		FixedSchedule.add(schedule); //占쏙옙占쏙옙占쏙옙占쏙옙占쌕몌옙臼占� 占쏙옙占싹깍옙
+=======
+		int begin_time = schedule.getBegin();
+		int end_time = schedule.getEnd();
+		
+		for(int i = begin_time; i<= end_time; i++) {
+			
+			for(int j = start_pos; j<=end_pos; j++) {
+				temporaryTable[i][j] = FIXED;
+			}
+		}
+		
+		FixedSchedule.add(schedule); 
+>>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 		isModified = true;
 		
 	}
 	
 	public void remove_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) 
 	{	
+<<<<<<< HEAD
 		//占쏙옙占쏙옙 占쏙옙占쏙옙占쌕몌옙臼占� 占쏙옙占쏙옙
+=======
+>>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 		int begin_time = schedule.getBegin();
 		int end_time = schedule.getEnd();
 		
-		for(int i=0;i<FixedSchedule.size();i++){
+		for(int i=0; i<FixedSchedule.size(); i++) {
+			
 			FixedScheduleUnit cursor = FixedSchedule.get(i);
 			
+<<<<<<< HEAD
 			if(cursor.getDay().equals(schedule.getDay())){
 				int median = (begin_time+end_time)/2;
 				
@@ -168,15 +192,25 @@ public class UserManager {
 					}
 					FixedSchedule.remove(cursor);
 						
+=======
+			if(cursor.getBegin() >= begin_time && cursor.getEnd()<= end_time) {
+				for( int j=start_pos ; j <= end_pos; j++) {
+				 
+					if(cursor.getDay().equals(findDay[j]));
+						FixedSchedule.remove(cursor);
+>>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 				}
-				
 			}
 		}
 		
 		isModified = true;
 	}
 	
+<<<<<<< HEAD
 	public void save() { //占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙占싱븝옙占쏙옙 占쏙옙占쏙옙 占쏙옙占싱븝옙 占쏙옙占쏘씌占쏙옙占�
+=======
+	public void save() {
+>>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 
 		personalTable = temporaryTable;
 		
@@ -238,7 +272,7 @@ public class UserManager {
 	
 	private boolean check_schedule(short t, int id)
 	{
-		if((t>>id)%2 == 1)
+		if((t>>id)%2 == avail)
 			return true;
 		else
 			return false;
@@ -246,11 +280,19 @@ public class UserManager {
 	
 	public ArrayList<Integer> show_organized_table(int i, int j)
 	{
+<<<<<<< HEAD
+=======
+
+>>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 		for(int k=0; k<IDlist.length; k++)
 			{
 				if(check_schedule((organizedTable[i][j]), k))
 					people.add(k);
 			}
+<<<<<<< HEAD
+=======
+
+>>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 		return people;
 	}
 	

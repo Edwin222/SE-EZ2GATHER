@@ -8,8 +8,11 @@ public class MainConsole {
 	
 	public static void main(String args[]){
 
+<<<<<<< HEAD
 		ScheduleServer s = new ScheduleServer();
 		NetServer.getInstance().openServer();
+=======
+>>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 		
 		Scanner scan = new Scanner(System.in);
 		StringTokenizer st;
@@ -17,6 +20,8 @@ public class MainConsole {
 		String command;
 		String order;
 		String name = null;
+		
+		NetServer.getInstance().getServer().loadData();
 		
 		while(true){
 			command = scan.nextLine();
@@ -27,23 +32,37 @@ public class MainConsole {
 			switch(order){
 			case "add" :
 				name = st.nextToken();
-				s.makeID(name); break;
+				NetServer.getInstance().getServer().makeID(name); break;
 			case "delete" :
 				name = st.nextToken();
-				s.deleteID(name); break;
+				NetServer.getInstance().getServer().deleteID(name); break;
 			case "notice" :
 				while(st.hasMoreTokens()){
 					name = name + " " + st.nextToken();
 				}
+<<<<<<< HEAD
 				s.setNotice(name); break;
 			case "exit":
 				scan.close();
 				NetServer.getInstance().closeServer();
 				return;
+=======
+				NetServer.getInstance().getServer().setNotice(name); break;
+			case "printID" : NetServer.getInstance().getServer().ShowId(); break;
+			case "help" : 	System.out.println("add <IDNAME> : add ID to IDLIST");
+							System.out.println("delete <IDNAME> : delete ID from IDLIST");
+							System.out.println("notice <NOTICE CONTENT> : set NOTICE");
+							System.out.println("printID : print ID names in IDLIST ");
+			case "exit" : NetServer.getInstance().getServer().saveData(); break;
+>>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 			default :
 				System.out.println("잘못된 입력입니다.");
 			}
+			
+			if(order == "exit") break;
 		}
+		
+		return ;
 	}
 }
 
@@ -53,7 +72,7 @@ case "checkID" : if(s.checkID(name)) System.out.println(name); else System.out.p
 case "checkNT" : System.out.println(s.getNotice()); break;
 case "set" : s.setcommonSchedule(name, k2, k1); break;
 case "show" : s.Screen(); break;
-case "showID" : s.ShowId(); break;
+case "printID" : s.ShowId(); break;
 case "nextDay" : s.nextDay(); break;
 case "save" : s.saveData(); break;
 case "clean" : s.cleanAll(); break;
