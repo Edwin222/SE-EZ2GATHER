@@ -8,7 +8,8 @@ public class UserManager {
 	
 	private String ID;
 	private Day[] findDay;
-	private String[] ID_list;
+	private String[] IDlist;
+	private int personNum;
 	private String notice;
 	//constant
 	final short BLANK = 0; //no schedule
@@ -63,6 +64,10 @@ public class UserManager {
 	
 	public short getPointTTable(int row, int col){
 		return temporaryTable[row][col];
+	}
+	
+	public int getPersonNum(int personNum){
+		return personNum;
 	}
 	
 	public void saveData(){
@@ -214,7 +219,12 @@ public class UserManager {
 	
 	public void setIDlist(String[] _id)
 	{
-		ID_list = _id;
+		IDlist = _id;
+	}
+	
+	public String[] getID_list(String[] id_list){
+		
+		return id_list;
 	}
 	
 	public void setOTable(short[][] _OTable)
@@ -237,7 +247,7 @@ public class UserManager {
 	
 	public ArrayList<Integer> show_organized_table(int i, int j)
 	{
-		for(int k=0; k<ID_list.length; k++)
+		for(int k=0; k<IDlist.length; k++)
 			{
 				if(check_schedule((organizedTable[i][j]), k))
 					people.add(k);
