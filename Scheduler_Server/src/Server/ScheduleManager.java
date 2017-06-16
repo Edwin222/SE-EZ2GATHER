@@ -52,9 +52,8 @@ public class ScheduleManager {
 			commonSchedule.add(new DaySchedule(day[(i+k)%7]));
 			
 	}
-
-	////////////////////////////////////// ID part
-	////////////////////////////////////// Methods///////////////////////////////////////////////////////
+ 
+	//ID part method
 	public int isIDexist(String id) {// check the ID is exist and return idx. if
 										// not, return -1;
 		for (int i = 0; i < MAXIDNUM; i++) {
@@ -75,14 +74,19 @@ public class ScheduleManager {
 		return -1;
 	}
 
-	public void makeID(String id) {// Check the ID is exist and add ID in blank
-				// idx.
+	public void makeID(String id) {// Check the ID is exist and add ID in blank idx
+				
 
 		if (isIDexist(id) != -1) {
 			System.out.println("ID is already exist.");
 			return;
 		}
 		
+		if (id.length() >= 10) {
+			System.out.println("input less than 10 letters");
+			return;
+		}
+
 		int i = Emptyidx();
 		
 		if (i != -1) {
@@ -98,7 +102,7 @@ public class ScheduleManager {
 		} else
 			System.out.println("cannot make ID anymore.");
 
-		
+		System.out.printf("ID registered : %s \n", id);
 		updateCommonList();
 	}
 	
@@ -119,6 +123,8 @@ public class ScheduleManager {
 				}
 		}
 		updateCommonList();
+		
+		System.out.printf("ID deleted : %s \n", id);
 	}
 
 	
@@ -156,16 +162,10 @@ public class ScheduleManager {
 	}
 	
 	
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////// Update
-	////////////////////////////////////// commonTable////////////////////////////////////////////////////////
-	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx) {// get
-																								// ID
-																								// idx
-																								// and
-																								// sc
-																								// table.
-																								// update organizedFixedSchedule and organizedSchedule.
+	//update commonTable
+	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx) {// get ID idx and sc table. 
+																						   //update organizedFixedSchedule and organizedSchedule.
+																								 
 		updateFixedSchedule(fsc, IDidx);
 
 		for (int i = 0; i < TIMENUM; i++)
@@ -219,7 +219,7 @@ public class ScheduleManager {
 			}
 	}
 
-	private void fillFixedSchedule(FixedScheduleUnit f, int Dayidx, int IDidx) {// get FixedSchedule and 		
+	private void fillFixedSchedule(FixedScheduleUnit f, int Dayidx, int IDidx) {
 		for (int i = f.getBegin(); i < f.getEnd() + 1; i++){
 			organizedFixedSchedule[i][Dayidx] = (short) (cleanID(organizedFixedSchedule[i][Dayidx],IDidx) + (short) (1 << IDidx));
 		}
@@ -242,14 +242,9 @@ public class ScheduleManager {
 			  return sc;
 	  }
 	 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////// Update common
-	/////////////////////////////////// List////////////////////////////////////////////
-	public void updateCommonList() {////////////// find
-												////////////// commonSchedule's
-												////////////// day and set
-												////////////// proper table.
+	  // update commonList
+	public void updateCommonList() {////////////// find commonSchedule's day and set proper table.
 		for (int i = 0; i < DATENUM; i++)
 			for(int j = 0; j < TIMENUM; j++)
 			switch (commonSchedule.get(i).getDay()) {
@@ -279,7 +274,7 @@ public class ScheduleManager {
 			}
 	}
 
-	//////////////////////////////// make Updated table(List -> new
+	//////////////////////////////// make Updated table(List -> newTa
 	//////////////////////////////// Table)///////////////////////////////////////////////////////////
 	public short[][] updateTable() {// let the commonSchedule's schedule copy in
 									// tmptable and return to make
@@ -294,7 +289,7 @@ public class ScheduleManager {
 	}
 	
 	///////////////////////////// make commonSchedule next day
-	//////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public void nextDay(){
 		
 		for(int i = 0; i < TIMENUM ; i++)

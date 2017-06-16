@@ -33,7 +33,7 @@ public class ScheduleServer {
 		Schedule = new ScheduleManager(today);
 
 	}
-
+	
 	///////////////////////////////////////// Date part
 	///////////////////////////////////////// Methods///////////////////////////////////////////////
 	public Day getDateDay() {
@@ -114,6 +114,13 @@ public class ScheduleServer {
 		return Schedule.getID();
 	}
 	
+	public int personNum(){
+		int num = 0;
+		for(int i = 0; i < MAXIDNUM ; i++)
+			if(Schedule.getID()[i] != null)
+				num++;
+		return num;
+	}
 	
 	///////////////////////////////////// Schedule part
 	///////////////////////////////////// Methods///////////////////////////////////////////////////////

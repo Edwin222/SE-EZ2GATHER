@@ -127,6 +127,7 @@ public class SchedulerGUI {
 			g.drawImage(renewal, 0, 0, 20, 20, this);
 		}
 	}
+	
 	class SettingComponent extends JComponent {
 		Toolkit tkit;
 		public void paintComponent(Graphics g) {
