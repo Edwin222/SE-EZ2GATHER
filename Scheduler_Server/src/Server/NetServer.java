@@ -76,7 +76,7 @@ public class NetServer {
 							obj_out.writeObject(sServer.getCommonSchedule());
 							obj_out.writeObject(sServer.getIdList());
 							sock_out.writeUTF(sServer.getNotice());
-							
+							sock_out.writeInt(sServer.personNum());
 							obj_out.close();
 							
 						} else { //login f
@@ -97,8 +97,6 @@ public class NetServer {
 							
 							sServer.setcommonSchedule(ID, fsu, sch);
 							
-							obj_in.close();
-							
 							sServer.nextDay();
 							
 							ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
@@ -106,7 +104,9 @@ public class NetServer {
 							obj_out.writeObject(sServer.getCommonSchedule());
 							obj_out.writeObject(sServer.getIdList());
 							sock_out.writeUTF(sServer.getNotice());
+							sock_out.writeInt(sServer.personNum());
 							
+							obj_in.close();
 							obj_out.close();
 							
 						} else {

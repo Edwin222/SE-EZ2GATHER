@@ -27,7 +27,7 @@ public class SchedulerGUI {
 	private Image cell, time, today, renewal, setting;
 	private Image p[] = new Image[9];
 	private Image cellFrame;
-	private int personNumber = 8;//netClient.getPerson_Number();
+	private int personNumber;
 	private JTextPane noticeTextPane = new JTextPane();
 	private String notice = "공지사항 : ";
 	private ScheduleUnit scheduleUnit;
@@ -77,6 +77,7 @@ public class SchedulerGUI {
 	 */
 	public SchedulerGUI(NetClient nc) {
 		this.netClient = nc;
+		this.personNumber = netClient.getManager().getPersonNum();
 		initialize();
 	}
 	public SchedulerGUI() {
@@ -176,12 +177,18 @@ public class SchedulerGUI {
 				p[i] = tkit.getImage(SchedulerGUI.class.getResource(ident));
 			}
 			super.paintComponent(g);
-			for (int i = 0; i < personNumber; i++) {
+			
+			int max = netClient.getManager().getID_list().length;
+			for (int i = 0; i < max; i++) {
+				if( netClient.getManager().getID_list()[i] == null){
+					continue;
+				}
+				
 				g.drawImage(p[i+1], 0, i * 20 + 4, 10, 10, this);
 				JTextPane nameTextPane = new JTextPane();
 				nameTextPane.setBackground(getBackground());
 				nameTextPane.setEditable(false);
-				nameTextPane.setText("홍길동");
+				nameTextPane.setText(netClient.getManager().getID_list()[i]);
 				nameTextPane.setBounds(15, i * 20, 50, 15);
 				add(nameTextPane);
 				//frame.getContentPane().add(nameTextPane);
@@ -217,23 +224,20 @@ public class SchedulerGUI {
 			
 			//600, 350
 			for (int j = 0; j < 6; j++) {
-				//people = netClient.getManager().show_organized_table(0, j);
+				people = netClient.getManager().show_organized_table(0, j);
 				for (int i = 0; i < personNumber; i++) {
-					//if (people[i] == true)
-					g.drawImage(p[i+1], (j * 100) + (i * 9) + 6, 0 + 6, 7, 7, this);
+					if (people.get(i).equals(1))
+						g.drawImage(p[i+1], (j * 100) + (i * 9) + 6, 0 + 6, 7, 7, this);
 				}
 				//begin = 0;
 				for (int i = 1; i < 12; i++) {
-					//people = netClient.getManager().show_organized_table(i, j);
-					//oldPeople = netClient.getManager().show_organized_table(i-1, j);
-					if (/*people.equals(oldPeople)*/false) {
-					}
-					else {
+					people = netClient.getManager().show_organized_table(i, j);
+					oldPeople = netClient.getManager().show_organized_table(i-1, j);
+					if (!people.equals(oldPeople)) {
 						g.drawImage(cellFrame, j * 100, i * (350 / 12)-2, 100, 4, this);
-						//begin = i;
 						for (int k = 0; k < personNumber; k++) {
-							//if (people[i] == true)
-							g.drawImage(p[k+1], (j * 100) + (k * 9) + 6, (350/12*i) + 6, 7, 7, this);
+							if (people.get(k).equals(1))
+								g.drawImage(p[k+1], (j * 100) + (k * 9) + 6, (350/12*i) + 6, 7, 7, this);
 						}
 					}
 				}
@@ -254,6 +258,9 @@ public class SchedulerGUI {
 			netClient.connectToServer();
 			netClient.sendMessage("RENEWAL");
 			netClient.endConnection();
+			
+			frame.setVisible(false);
+			frame.setVisible(true);
 		}
 
 		@Override

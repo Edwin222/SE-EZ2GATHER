@@ -27,7 +27,7 @@ public class ScheduleServer {
 	
 	//constructor
 	public ScheduleServer(){		
-
+		this.Notice = "";
 		this.today = getDateDay();
 		Schedule = new ScheduleManager(today);
 

@@ -108,12 +108,16 @@ public class SettingGUI {
 		
 		panel.setBounds(10, 80, 650, 500);
 		bPanel.setBounds(660, 150, 80, 140);
+		sPanel.setBounds(50,100,600,350);
+		sPanel.setBackground(new Color(255,0,0,0));
 		frame.getContentPane().add(panel);
 		frame.getContentPane().add(bPanel);
+		frame.getContentPane().add(sPanel);
 		frame.getContentPane().add(saveComp);
 		frame.getContentPane().add(exitComp);
 		frame.getContentPane().add(cellComp);
 		frame.getContentPane().setComponentZOrder(cellComp, 0);
+		frame.getContentPane().setComponentZOrder(sPanel, 1);
 		frame.getContentPane().setComponentZOrder(panel, 2);
 		
 		JTextPane textPane = new JTextPane();
@@ -128,25 +132,77 @@ public class SettingGUI {
 		cellComp.setVisible(true);
 	}
 	
-	class SchedulePanel extends JPanel {
+	class SchedulePanel extends JPanel implements MouseListener {
+		private final int part_width = 100;
+		private final int part_height = 29;
 		private final int COL = 6;
 		private final int ROW = 12;
+		private final int BLANK = 0;
+		private final int UNFIXED = 1;
+		
 		Toolkit tkit;
 		
 		public void paintComponent(Graphics g){
 			tkit = tkit.getDefaultToolkit();
 			
+			Image temp = tkit.getImage(SchedulerGUI.class.getResource("/resource/temp.png"));
+			
 			super.paintComponent(g);
 			//temp schedule
 			for(int i=0;i<COL;i++){
+				int start = -1;
 				int length = 0;
 				for(int j=0;j<ROW;j++){
-					
+					if(netClient.getManager().getPointTTable(j, i) == UNFIXED){
+						
+						if(start < 0){
+							start = j;
+							length++;
+						} else {
+							length++;
+						}
+						
+					} else if(netClient.getManager().getPointTTable(j, i) == BLANK || j == ROW-1){
+						g.drawImage(temp, COL*part_width, ROW*part_height, part_width, length*part_height,this);
+						length = 0;
+						start = -1;
+					}
 				}
 			}
 			
 			
 			//fixed schedule
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			this.setVisible(false);
+			this.setVisible(true);
 		}
 	}
 	
@@ -279,8 +335,8 @@ public class SettingGUI {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			netClient.connectToServer();
 			netClient.getManager().save();
+			netClient.connectToServer();
 			netClient.sendMessage("SAVE");
 			netClient.endConnection();
 		}
@@ -327,8 +383,8 @@ public class SettingGUI {
 				int selected = JOptionPane.showConfirmDialog(null, "저장하시겠습니까?", "Save", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 				switch(selected){
 				case JOptionPane.YES_OPTION:
-					netClient.connectToServer();
 					netClient.getManager().save();
+					netClient.connectToServer();
 					netClient.sendMessage("SAVE");
 					netClient.endConnection();
 					
@@ -473,31 +529,33 @@ public class SettingGUI {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
+			int sX = start_x/part_width;
+			int sY = start_y/part_height;
 			int row = checked_height;
 			int col = checked_width;
 			
 			ScheduleUnit sc;
 			if(command <= FIXED_MINUS){
 				//fixed
-				sc = new FixedScheduleUnit(start_y, start_y + row, netClient.getManager().getday(start_x+ checked_width));
+				sc = new FixedScheduleUnit(sY, sY + row, netClient.getManager().getday(sX+ checked_width));
 				
 			} else {
 				//temp
-				sc = new ScheduleUnit(start_y, start_y + row);
+				sc = new ScheduleUnit(sY, sY + row);
 			}
 			
 			switch(command){
 			case FIXED_PLUS:
-				netClient.getManager().add_FixedSchedule( (FixedScheduleUnit) sc, start_x, start_x+checked_width);
+				netClient.getManager().add_FixedSchedule( (FixedScheduleUnit) sc, sX, sX+checked_width);
 				break;
 			case FIXED_MINUS:
-				netClient.getManager().remove_FixedSchedule( (FixedScheduleUnit) sc, start_x, start_x+checked_width);
+				netClient.getManager().remove_FixedSchedule( (FixedScheduleUnit) sc, sX, sX+checked_width);
 				break;
 			case TEMP_PLUS:
-				netClient.getManager().add_Schedule( sc, start_x, start_x+checked_width);
+				netClient.getManager().add_Schedule( sc, sX, sX+checked_width);
 				break;
 			case TEMP_MINUS:
-				netClient.getManager().remove_Schedule( sc, start_x, start_x+checked_width);
+				netClient.getManager().remove_Schedule( sc, sX, sX+checked_width);
 				break;
 			}
 			

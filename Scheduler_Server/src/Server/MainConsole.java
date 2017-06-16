@@ -8,11 +8,7 @@ public class MainConsole {
 	
 	public static void main(String args[]){
 
-<<<<<<< HEAD
-		ScheduleServer s = new ScheduleServer();
 		NetServer.getInstance().openServer();
-=======
->>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
 		
 		Scanner scan = new Scanner(System.in);
 		StringTokenizer st;
@@ -40,26 +36,20 @@ public class MainConsole {
 				while(st.hasMoreTokens()){
 					name = name + " " + st.nextToken();
 				}
-<<<<<<< HEAD
-				s.setNotice(name); break;
-			case "exit":
-				scan.close();
-				NetServer.getInstance().closeServer();
-				return;
-=======
 				NetServer.getInstance().getServer().setNotice(name); break;
 			case "printID" : NetServer.getInstance().getServer().ShowId(); break;
 			case "help" : 	System.out.println("add <IDNAME> : add ID to IDLIST");
 							System.out.println("delete <IDNAME> : delete ID from IDLIST");
 							System.out.println("notice <NOTICE CONTENT> : set NOTICE");
 							System.out.println("printID : print ID names in IDLIST ");
-			case "exit" : NetServer.getInstance().getServer().saveData(); break;
->>>>>>> d8d1fa72b279a8dec0fc24e2ad012986ab6f9103
+			case "exit" : case "save":
+				NetServer.getInstance().getServer().saveData(); break;
+			case "screen" : NetServer.getInstance().getServer().Screen(); break;
 			default :
 				System.out.println("잘못된 입력입니다.");
 			}
 			
-			if(order == "exit") break;
+			if(order.equals("exit")) break;
 		}
 		
 		return ;

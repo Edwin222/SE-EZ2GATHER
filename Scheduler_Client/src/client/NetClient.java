@@ -56,10 +56,12 @@ public class NetClient {
 					short[][] table = (short[][]) obj_in.readObject();
 					String[] idList = (String[]) obj_in.readObject();
 					String notice = sock_in.readUTF();
+					int personNum = sock_in.readInt();
 					
 					manager.setOTable(table);
 					manager.setIDlist(idList);
 					manager.setNotice(notice);
+					manager.setPersonNum(personNum);
 					
 					obj_in.close();
 					
@@ -79,19 +81,20 @@ public class NetClient {
 					obj_out.writeObject(manager.getFixedSchedule());
 					obj_out.writeObject(manager.getPTable());
 					
-					obj_out.close();
-					
 					ObjectInputStream obj_in = new ObjectInputStream(socket.getInputStream());
 					
 					short[][] table = (short[][]) obj_in.readObject();
 					String[] idList = (String[]) obj_in.readObject();
 					String notice = sock_in.readUTF();
+					int personNum = sock_in.readInt();
 					
 					manager.setOTable(table);
 					manager.setIDlist(idList);
 					manager.setNotice(notice);
+					manager.setPersonNum(personNum);
 					
 					obj_in.close();
+					obj_out.close();
 					
 					result = true;
 				} else {
