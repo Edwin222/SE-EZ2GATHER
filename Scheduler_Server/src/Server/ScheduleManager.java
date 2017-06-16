@@ -89,6 +89,14 @@ public class ScheduleManager {
 		return -1;
 	}
 
+	/************************************************************************************/
+	/* makeID		       		           					   					   		*/
+	/* input : id String값                   							 					 	*/
+	/* process : 	길이가 10자 이상이거나 idList애 이미 id가 존재하면  err출력후 리턴				  	*/
+	/* 				아니면 idList애 id를 추가하고 organizedSchedule, organizedFixedSchedule,   */
+	/* 				commonSchedule의 id idx애 1값을 넣어준다.				 					*/
+	/* return : none										  							*/
+	/************************************************************************************/
 	public void makeID(String id) {// Check the ID is exist and add ID in blank idx
 				
 
@@ -120,7 +128,14 @@ public class ScheduleManager {
 		updateCommonList();
 	}
 	
-
+	/********************************************************************************************/
+	/* deleteID		       		           					   					   				*/
+	/* input : id String값                   							 					 			*/
+	/* process :	idList애 해당 id가 있는지 확인 후 없으면 err출력후 리턴				  					*/
+	/* 				없으면 idList애서 해당 id delete후  organizedSchedule,organizedFixedScheduleTable	*/
+	/* 				commonSchedule의 해당 idx의 1값을 delete한다. 										*/
+	/* return : none										  									*/
+	/********************************************************************************************/
 	public void deleteID(String id) {
 		int IDNUM = isIDexist(id);
 		if (IDNUM == -1) {
@@ -176,10 +191,16 @@ public class ScheduleManager {
 	}
 	
 	
-	//update commonTable
-	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx) {// get ID idx and sc table. 
-																						   // update organizedFixedSchedule and organizedSchedule.
-																								 
+	/************************************************************************************/
+	/* updateSchedule		       		   					   					   		*/
+	/* input : FixedScheduleUnit의 List, short형의 scheduleTable, 변경할 id의 idx			 	*/
+	/* process : 	FixedScheduleUnitList는 updateFixedSchedule 호출하여 update	.		  	*/
+	/* 				scheduleTable이용하여 현재 scheduleTable update.							*/
+	/* 				update된 FixedSchedule, Schedule을 이용하여 commonList update.			*/
+	/* return : none										  							*/
+	/************************************************************************************/
+	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx) {
+																						   													 
 		updateFixedSchedule(fsc, IDidx);
 
 		for (int i = 0; i < TIMENUM; i++)
@@ -191,7 +212,13 @@ public class ScheduleManager {
 
 		updateCommonList();
 	}
-
+	/************************************************************************************************/
+	/* updateFixedSchedule		       		   					   					   				*/
+	/* input : FixedScheduleUnit의 List, 변경할 id의 idx			 										*/
+	/* process : 	FixedScheduleUnit List크기 확인 후 organizedFixedSchedule의 해당 id idx의 값을 모두 지운다.	*/
+	/* 				그후 FixedScheduleUnit하나하나를 읽어오면서 해당 내용을 organizedFixedUnit애 업대이트			*/
+	/* return : none										  										*/
+	/************************************************************************************************/
 	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx) {
 		int Fsize;
 		
@@ -233,12 +260,26 @@ public class ScheduleManager {
 			}
 	}
 
+	/************************************************************************************/
+	/* fillFixedSchedule	       		   					   					   		*/
+	/* input : FixedScheduleUnit, 요일 idx, id idx						 				*/
+	/* process : 	FixedScheduleUnit의 내용을 읽어 해당 id애다가 넣어준다.		  				*/
+	/* 				scheduleTable이용하여 현재 scheduleTable update.							*/
+	/* 				update된 FixedSchedule, Schedule을 이용하여 commonList update.			*/
+	/* return : none										  							*/
+	/************************************************************************************/
 	private void fillFixedSchedule(FixedScheduleUnit f, int Dayidx, int IDidx) {
 		for (int i = f.getBegin(); i < f.getEnd() + 1; i++){
 			organizedFixedSchedule[i][Dayidx] = (short) (cleanID(organizedFixedSchedule[i][Dayidx],IDidx) + (short) (1 << IDidx));
 		}
 	}
 	
+	/************************************************************************************/
+	/* isFilledTime	       		   					   					   				*/
+	/* input : short형 인자, id의 idx										 				*/
+	/* process :	shot형 인자애서 id의 idx애 값이 있는지 확인	  								*/
+	/* return : 값이 있으면 true, 없으면 false					  							*/
+	/************************************************************************************/
 	  private boolean isFilledTime(short t, int id)
 	  { 
 		  if( (t>>id)%2 == 1) 
@@ -248,6 +289,12 @@ public class ScheduleManager {
 			  return false; 
 	  }
 	  
+	/************************************************************************************/
+	/* cleanID	       		   					   					   					*/
+	/* input : short형 인자, id의 idx										 				*/
+	/* process :	shot형 인자애서 id의 idx애 값이 있는지 확인후 있으면 지우고 없으면 그대로 반환			*/
+	/* return : update된 short형 인자							  							*/
+	/************************************************************************************/ 
 	  private short cleanID(short sc,int id){ 
 
 		  if(isFilledTime(sc,id))
@@ -257,7 +304,12 @@ public class ScheduleManager {
 	  }
 	 
 
-	  // update commonList
+	/************************************************************************************/
+	/* updateCommonList	       					   					   					*/
+	/* input : none														 				*/
+	/* process :	현재 organizedSchedule을 받아 commonSchedule의 List update해준다.			*/
+	/* return : none										  							*/
+	/************************************************************************************/
 	public void updateCommonList() {//find commonSchedule's day and set proper table.
 		for (int i = 0; i < DATENUM; i++)
 			for(int j = 0; j < TIMENUM; j++)
@@ -288,7 +340,12 @@ public class ScheduleManager {
 			}
 	}
 
-	//make Updated table(List -> newTable)
+	/************************************************************************************/
+	/* updateCommonTable    					   					   					*/
+	/* input : none														 				*/
+	/* process :	현재 ArrayList type의 commonSchedule을 short형 2D Table로 변환				*/
+	/* return : 변환된 short형 2D table							  							*/
+	/************************************************************************************/
 	public short[][] updateTable() {// let the commonSchedule's schedule copy in tmptable and return to make updatedSchedule(edited day.)
 		
 		short tmptable[][] = new short[TIMENUM][DATENUM];
@@ -300,7 +357,13 @@ public class ScheduleManager {
 		return tmptable;
 	}
 	
-	// make commonSchedule next day
+	/****************************************************************************************/
+	/* nextDay    					   					   									*/
+	/* input : none														 					*/
+	/* process :	commonSchedule의 마지막요일을 지운 후 맨처음 요일로 생성								*/
+	/* 				마지막요일이 가지고있던 FixedSchedule 정보이용하여 맨처음요일의 정보 update				*/
+	/* return : none										  								*/
+	/****************************************************************************************/
 	public void nextDay(){
 		
 		for(int i = 0; i < TIMENUM ; i++)
