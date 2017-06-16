@@ -71,7 +71,7 @@ public class SchedulerGUI {
 		RenewalComponent renewalComp = new RenewalComponent();
 		SettingComponent settingComp = new SettingComponent();
 		PersonComponent personComp = new PersonComponent();
-		//JoinableComponent joinableComp = new JoinableComponent();
+		JoinableComponent joinableComp = new JoinableComponent();
 		panel.setBounds(10, 80, 650, 500);
 		//joinableComp.setBounds(50, 100, 600, 350);
 		personComp.setBounds(670, 100, 80, 200);
@@ -81,11 +81,15 @@ public class SchedulerGUI {
 		settingComp.addMouseListener(new RefreshClick());
 		settingComp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		settingComp.setBounds(700, 430, 20, 20);
+		joinableComp.setBounds(40, 20, 600, 350);
 		
 		frame.getContentPane().add(panel);
 		frame.getContentPane().add(renewalComp);
 		frame.getContentPane().add(settingComp);
 		frame.getContentPane().add(personComp);
+		frame.getContentPane().add(joinableComp);
+		frame.getContentPane().setComponentZOrder(joinableComp, 0);
+		frame.getContentPane().setComponentZOrder(panel, 3);
 		//frame.getContentPane().add(joinableComp);
 		
 		noticeTextPane.setEditable(false);
@@ -95,13 +99,14 @@ public class SchedulerGUI {
 		noticeTextPane.setBounds(50, 30, 500, 30);
 		frame.getContentPane().add(noticeTextPane);
 		
-		panel.setVisible(true);
-		renewalComp.setVisible(true);
-		settingComp.setVisible(true);
+		//panel.setVisible(true);
+		//renewalComp.setVisible(true);
+		//settingComp.setVisible(true);
 	}
 	class MyPanel extends JPanel {
 		Toolkit tkit;
 		public void paintComponent(Graphics g) {
+			System.out.println("draw");
 			tkit = tkit.getDefaultToolkit();
 			cell = tkit.getImage(SchedulerGUI.class.getResource("/resource/SchedulerBack.png"));
 			time = tkit.getImage(SchedulerGUI.class.getResource("/resource/time.png"));
@@ -112,9 +117,7 @@ public class SchedulerGUI {
 			g.drawImage(cell, 40, 20, 600, 350, this);
 			g.drawImage(time, 0, 20, 25, 350, this);
 			g.drawImage(today, 60, 0, 60, 20, this);
-			JoinableComponent joinableComp = new JoinableComponent();
-			joinableComp.setBounds(40, 20, 600, 350);
-			add(joinableComp);
+			
 		}
 		
 	}
@@ -195,6 +198,8 @@ public class SchedulerGUI {
 				}
 				g.drawImage(cellFrame, j * 100, begin * (350 / 12), 100, (12 - begin) * (350 / 12), this);
 			}*/
+			//this.setVisible(false);
+			//this.setVisible(true);
 		}
 	}
 	class RefreshClick implements MouseListener {
