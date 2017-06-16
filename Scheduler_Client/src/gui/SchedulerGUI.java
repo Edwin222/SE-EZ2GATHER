@@ -48,6 +48,30 @@ public class SchedulerGUI {
 		});
 	}
 
+	public void launchSceduler(NetClient nc){
+		EventQueue.invokeLater(new Launcher(nc));
+	}
+	
+	private class Launcher implements Runnable {
+		NetClient nc;
+		
+		public Launcher(NetClient nc){
+			this.nc = nc;
+		}
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				SchedulerGUI window = new SchedulerGUI(nc);
+				window.frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
 	/**
 	 * Create the application.
 	 */
@@ -71,26 +95,23 @@ public class SchedulerGUI {
 		RenewalComponent renewalComp = new RenewalComponent();
 		SettingComponent settingComp = new SettingComponent();
 		PersonComponent personComp = new PersonComponent();
-		JoinableComponent joinableComp = new JoinableComponent();
+		//JoinableComponent joinableComp = new JoinableComponent();
 		panel.setBounds(10, 80, 650, 500);
 		//joinableComp.setBounds(50, 100, 600, 350);
 		personComp.setBounds(670, 100, 80, 200);
 		renewalComp.addMouseListener(new RefreshClick());
 		renewalComp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		renewalComp.setBounds(670, 430, 20, 20);
-		settingComp.addMouseListener(new RefreshClick());
+		settingComp.addMouseListener(new SettingClick());
 		settingComp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		settingComp.setBounds(700, 430, 20, 20);
-		joinableComp.setBounds(40, 20, 600, 350);
+		//joinableComp.setBounds(40, 20, 600, 350);
 		
 		frame.getContentPane().add(panel);
 		frame.getContentPane().add(renewalComp);
 		frame.getContentPane().add(settingComp);
 		frame.getContentPane().add(personComp);
-		frame.getContentPane().add(joinableComp);
-		frame.getContentPane().setComponentZOrder(joinableComp, 0);
-		frame.getContentPane().setComponentZOrder(panel, 3);
-		//frame.getContentPane().add(joinableComp);
+		//frame.getContentPane().add(joinableComp); erase
 		
 		noticeTextPane.setEditable(false);
 		noticeTextPane.setText(notice);
@@ -103,6 +124,7 @@ public class SchedulerGUI {
 		//renewalComp.setVisible(true);
 		//settingComp.setVisible(true);
 	}
+	
 	class MyPanel extends JPanel {
 		Toolkit tkit;
 		public void paintComponent(Graphics g) {
@@ -118,6 +140,11 @@ public class SchedulerGUI {
 			g.drawImage(time, 0, 20, 25, 350, this);
 			g.drawImage(today, 60, 0, 60, 20, this);
 			
+			//////modified//////
+			JoinableComponent joinableComp = new JoinableComponent();
+			joinableComp.setBounds(40, 20, 600, 350);
+			add(joinableComp);
+			
 		}
 		
 	}
@@ -130,7 +157,6 @@ public class SchedulerGUI {
 			g.drawImage(renewal, 0, 0, 20, 20, this);
 		}
 	}
-	
 	class SettingComponent extends JComponent {
 		Toolkit tkit;
 		public void paintComponent(Graphics g) {
@@ -173,33 +199,45 @@ public class SchedulerGUI {
 			tkit = tkit.getDefaultToolkit();
 			cellFrame = tkit.getImage(SchedulerGUI.class.getResource("/resource/HL.png"));
 			super.paintComponent(g);
-			g.drawImage(cellFrame, 0, 0, 600, 4, this);
-			g.drawImage(cellFrame, 0, 0, 4, 350, this);
-			g.drawImage(cellFrame, 600, 0, -4, 350, this);
-			g.drawImage(cellFrame, 0, 350, 600, -4, this);
-			g.drawImage(cellFrame, 0, 10, 4, 350, this);
-			g.drawImage(cellFrame, 0, 350/3-2, 4, 350, this);
-			g.drawImage(cellFrame, 0, 350/2-2, 4, 350, this);
-			g.drawImage(cellFrame, 0, 350/3*2-2, 4, 350, this);
-			g.drawImage(cellFrame, 0, 350/6*5-2, 4, 350, this);
+			g.drawImage(cellFrame, 0, 0, 600, 2, this);
+			g.drawImage(cellFrame, 0, 0, 2, 350, this);
+			g.drawImage(cellFrame, 600, 0, -2, 350, this);
+			g.drawImage(cellFrame, 0, 350, 600, -2, this);
+			g.drawImage(cellFrame, (600/6)-2, 0, 4, 350, this);
+			g.drawImage(cellFrame, (600/3)-2, 0, 4, 350, this);
+			g.drawImage(cellFrame, (600/2)-2, 0, 4, 350, this);
+			g.drawImage(cellFrame, (600/3*2)-2, 0, 4, 350, this);
+			g.drawImage(cellFrame, (600/6*5)-2, 0, 4, 350, this);
+			
+			//////modified �걹源뚯� �닔�젙//////
+			for (int i = 1; i <= personNumber; i++) {
+				String ident = String.format("%s%d%s", "/resource/p", i, ".png");
+				p[i] = tkit.getImage(SchedulerGUI.class.getResource(ident));
+			}
 			
 			//600, 350
-			/*for (int j = 0; j < 6; j++) {
-				begin = 0;
+			for (int j = 0; j < 6; j++) {
+				//people = netClient.getManager().show_organized_table(0, j);
+				for (int i = 0; i < personNumber; i++) {
+					//if (people[i] == true)
+					g.drawImage(p[i+1], (j * 100) + (i * 9) + 6, 0 + 6, 7, 7, this);
+				}
+				//begin = 0;
 				for (int i = 1; i < 12; i++) {
 					//people = netClient.getManager().show_organized_table(i, j);
 					//oldPeople = netClient.getManager().show_organized_table(i-1, j);
-					if (/*people.equals(oldPeople)true) {
+					if (/*people.equals(oldPeople)*/false) {
 					}
 					else {
-						g.drawImage(cellFrame, j * 100, begin * (350 / 12), 100, (i - begin + 1) * (350 / 12), this);
-						begin = i;
+						g.drawImage(cellFrame, j * 100, i * (350 / 12)-2, 100, 4, this);
+						//begin = i;
+						for (int k = 0; k < personNumber; k++) {
+							//if (people[i] == true)
+							g.drawImage(p[k+1], (j * 100) + (k * 9) + 6, (350/12*i) + 6, 7, 7, this);
+						}
 					}
 				}
-				g.drawImage(cellFrame, j * 100, begin * (350 / 12), 100, (12 - begin) * (350 / 12), this);
-			}*/
-			//this.setVisible(false);
-			//this.setVisible(true);
+			}
 		}
 	}
 	class RefreshClick implements MouseListener {
@@ -248,6 +286,10 @@ public class SchedulerGUI {
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
 			netClient.getManager().Open_Edit();
+			frame.dispose();
+			
+			SettingGUI sgui = new SettingGUI();
+			sgui.launchSceduler(netClient);
 		}
 
 		@Override

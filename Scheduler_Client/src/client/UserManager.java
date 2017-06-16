@@ -106,7 +106,9 @@ public class UserManager {
 		for(int i = begin_time; i<= end_time; i++) {
 			
 			for(int j = start_pos; j<=end_pos; j++) {
-				temporaryTable[i][j] = UNFIXED;
+				
+				if(temporaryTable[i][j] == BLANK)
+					temporaryTable[i][j] = UNFIXED;
 			}
 		}
 		
@@ -121,7 +123,9 @@ public class UserManager {
 		for(int i = begin_time; i<=end_time; i++) {
 			
 			for(int j = start_pos; j<=end_pos; j++) {
-				temporaryTable[i][j] = BLANK;
+				
+				if(temporaryTable[i][j] == UNFIXED)
+					temporaryTable[i][j] = BLANK;
 			}
 		}
 		
@@ -130,25 +134,14 @@ public class UserManager {
 	
 	public void add_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) {
 		
-		//���� �����ٸ�Ͽ� ���ϱ�
-		int begin_time = schedule.getBegin();
-		int end_time = schedule.getEnd();
-		
-		for(int i = begin_time; i<= end_time; i++) {
-			
-			for(int j = start_pos; j<=end_pos; j++) {
-				temporaryTable[i][j] = FIXED;
-			}
-		}
-		
-		FixedSchedule.add(schedule); //���������ٸ�Ͽ� ���ϱ�
+		FixedSchedule.add(schedule); //占쏙옙占쏙옙占쏙옙占쏙옙占쌕몌옙臼占� 占쏙옙占싹깍옙
 		isModified = true;
 		
 	}
 	
 	public void remove_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) 
 	{	
-		//���� �����ٸ�Ͽ� ����
+		//占쏙옙占쏙옙 占쏙옙占쏙옙占쌕몌옙臼占� 占쏙옙占쏙옙
 		int begin_time = schedule.getBegin();
 		int end_time = schedule.getEnd();
 		
@@ -169,9 +162,10 @@ public class UserManager {
 						}
 					}
 					
-					for(int j=cursor.getBegin(); j <= cursor.getEnd(); j++ )
-						temporaryTable[j][schedulePos] = BLANK;
-					
+					for(int j=cursor.getBegin(); j <= cursor.getEnd(); j++ ) {
+						if(temporaryTable[i][j] == FIXED)
+							temporaryTable[j][schedulePos] = BLANK;
+					}
 					FixedSchedule.remove(cursor);
 						
 				}
@@ -182,7 +176,7 @@ public class UserManager {
 		isModified = true;
 	}
 	
-	public void save() { //����� ���������̺��� ���� ���̺� ������
+	public void save() { //占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙占싱븝옙占쏙옙 占쏙옙占쏙옙 占쏙옙占싱븝옙 占쏙옙占쏘씌占쏙옙占�
 
 		personalTable = temporaryTable;
 		
@@ -212,6 +206,11 @@ public class UserManager {
 		organizedTable = newOTable;
 	}
 	
+	public Day getday(int today) {
+		
+		return findDay[today];
+		
+	}
 	public short[][] getPTable()
 	{
 		return personalTable;
@@ -247,19 +246,11 @@ public class UserManager {
 	
 	public ArrayList<Integer> show_organized_table(int i, int j)
 	{
-<<<<<<< HEAD
 		for(int k=0; k<IDlist.length; k++)
 			{
 				if(check_schedule((organizedTable[i][j]), k))
 					people.add(k);
 			}
-=======
-		for(int k=0; k<ID_list.length; k++)
-		{
-			if(check_schedule((organizedTable[i][j]), k))
-				people.add(k);
-		}
->>>>>>> 3b6eb8a868beec9969a940e68dffce78f9f3852c
 		return people;
 	}
 	

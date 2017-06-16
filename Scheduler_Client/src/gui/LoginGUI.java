@@ -17,6 +17,7 @@ import java.awt.event.*;
 import client.*;
 public class LoginGUI {
 	
+	private NetClient netClient;
 	private JFrame frmEzgather;
 	private JTextField text_IP;
 	private JTextField text_PORT;
@@ -154,12 +155,12 @@ public class LoginGUI {
 		else {
 			boolean login = false;
 			frmEzgather.dispose();
-			//NetClient netClient = new NetClient(IP, Integer.parseInt(PORT), ID);
-			//netClient.connectToServer();
-			//login = netClient.sendMessage("LOGIN");
+			netClient = new NetClient(IP, Integer.parseInt(PORT), ID);
+			netClient.connectToServer();
+			login = netClient.sendMessage("LOGIN");
 			//request login to client
 			
-			if (login) {	//login F
+			if (!login) {	//login F
 				try {
 					LoginGUI window = new LoginGUI();
 					window.frmEzgather.setVisible(true);
@@ -169,8 +170,8 @@ public class LoginGUI {
 				JOptionPane.showMessageDialog(null, "Please check IP, PORT or ID", "error", JOptionPane.OK_OPTION);
 			}
 			else {			//login S
-				SchedulerGUI Scheduler = new SchedulerGUI(/*netClient*/);
-				Scheduler.launchSceduler();
+				SchedulerGUI Scheduler = new SchedulerGUI();
+				Scheduler.launchSceduler(netClient);
 			}
 		}
 	}

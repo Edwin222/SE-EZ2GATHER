@@ -21,6 +21,7 @@ import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
 
 import client.*;
+import common.*;
 
 public class SettingGUI {
 	private NetClient netClient;
@@ -48,7 +49,7 @@ public class SettingGUI {
 		});
 	}
 	
-	public void launchScheduler(NetClient nc){
+	public void launchSceduler(NetClient nc){
 		EventQueue.invokeLater(new Launcher(nc));
 	}
 	
@@ -59,7 +60,9 @@ public class SettingGUI {
 			this.nc = nc;
 		}
 		
-		public void run(){
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
 			try {
 				SettingGUI window = new SettingGUI(nc);
 				window.frame.setVisible(true);
@@ -67,6 +70,7 @@ public class SettingGUI {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 	
 	public SettingGUI(NetClient nc) {
@@ -88,15 +92,14 @@ public class SettingGUI {
 		frame.getContentPane().setLayout(null);
 		MyPanel panel = new MyPanel();
 		ButtonPanel bPanel = new ButtonPanel();
+		SchedulePanel sPanel = new SchedulePanel();
 		SaveComponent saveComp = new SaveComponent();
 		ExitComponent exitComp = new ExitComponent();
 		CellComponent cellComp = new CellComponent();
 		
-		saveComp.addMouseListener(new SaveClick());
 		saveComp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		saveComp.setBounds(670, 420, 20, 20);
 		
-		exitComp.addMouseListener(new ExitClick());
 		exitComp.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		exitComp.setBounds(700, 420, 20, 20);
 		
@@ -124,7 +127,28 @@ public class SettingGUI {
 		exitComp.setVisible(true);
 		cellComp.setVisible(true);
 	}
-
+	
+	class SchedulePanel extends JPanel {
+		private final int COL = 6;
+		private final int ROW = 12;
+		Toolkit tkit;
+		
+		public void paintComponent(Graphics g){
+			tkit = tkit.getDefaultToolkit();
+			
+			super.paintComponent(g);
+			//temp schedule
+			for(int i=0;i<COL;i++){
+				int length = 0;
+				for(int j=0;j<ROW;j++){
+					
+				}
+			}
+			
+			
+			//fixed schedule
+		}
+	}
 	
 	class ButtonPanel extends JPanel implements MouseListener {
 		Toolkit tkit;
@@ -240,23 +264,111 @@ public class SettingGUI {
 		}
 	}
 	
-	class SaveComponent extends JComponent {
+	class SaveComponent extends JComponent implements MouseListener {
 		Toolkit tkit;
+		public SaveComponent(){
+			addMouseListener(this);
+		}
+		
 		public void paintComponent(Graphics g) {
 			tkit = tkit.getDefaultToolkit();
 			save = tkit.getImage(SchedulerGUI.class.getResource("/resource/save.png"));
 			super.paintComponent(g);
 			g.drawImage(save, 0, 0, 20, 20, this);
 		}
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			netClient.connectToServer();
+			netClient.getManager().save();
+			netClient.sendMessage("SAVE");
+			netClient.endConnection();
+		}
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
-	class ExitComponent extends JComponent {
+	class ExitComponent extends JComponent implements MouseListener {
 		Toolkit tkit;
+		public ExitComponent(){
+			addMouseListener(this);
+		}
+		
 		public void paintComponent(Graphics g) {
 			tkit = tkit.getDefaultToolkit();
 			exit= tkit.getImage(SchedulerGUI.class.getResource("/resource/exit.png"));
 			super.paintComponent(g);
 			g.drawImage(exit, 0, 0, 20, 20, this);
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			if(netClient.getManager().Check_Edited()){
+				
+				int selected = JOptionPane.showConfirmDialog(null, "저장하시겠습니까?", "Save", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				switch(selected){
+				case JOptionPane.YES_OPTION:
+					netClient.connectToServer();
+					netClient.getManager().save();
+					netClient.sendMessage("SAVE");
+					netClient.endConnection();
+					
+				case JOptionPane.NO_OPTION:
+					frame.dispose();
+					SchedulerGUI scgui = new SchedulerGUI();
+					scgui.launchSceduler(netClient);
+					break;
+					
+				case JOptionPane.CANCEL_OPTION:
+				case JOptionPane.CLOSED_OPTION:
+					break;
+					
+				}
+				
+			} else {
+				frame.dispose();
+				SchedulerGUI scgui = new SchedulerGUI();
+				scgui.launchSceduler(netClient);
+			}
+		}
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 	
@@ -361,6 +473,34 @@ public class SettingGUI {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
+			int row = checked_height;
+			int col = checked_width;
+			
+			ScheduleUnit sc;
+			if(command <= FIXED_MINUS){
+				//fixed
+				sc = new FixedScheduleUnit(start_y, start_y + row, netClient.getManager().getday(start_x+ checked_width));
+				
+			} else {
+				//temp
+				sc = new ScheduleUnit(start_y, start_y + row);
+			}
+			
+			switch(command){
+			case FIXED_PLUS:
+				netClient.getManager().add_FixedSchedule( (FixedScheduleUnit) sc, start_x, start_x+checked_width);
+				break;
+			case FIXED_MINUS:
+				netClient.getManager().remove_FixedSchedule( (FixedScheduleUnit) sc, start_x, start_x+checked_width);
+				break;
+			case TEMP_PLUS:
+				netClient.getManager().add_Schedule( sc, start_x, start_x+checked_width);
+				break;
+			case TEMP_MINUS:
+				netClient.getManager().remove_Schedule( sc, start_x, start_x+checked_width);
+				break;
+			}
+			
 			checked_width = 0;
 			checked_height = 0;
 			this.setVisible(false);
@@ -393,67 +533,5 @@ public class SettingGUI {
 		
 
 	}
-	
-	class SaveClick implements MouseListener {
 
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-	}
-	class ExitClick implements MouseListener {
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-	}
 }

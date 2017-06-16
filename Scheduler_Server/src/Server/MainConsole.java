@@ -9,6 +9,8 @@ public class MainConsole {
 	public static void main(String args[]){
 
 		ScheduleServer s = new ScheduleServer();
+		NetServer.getInstance().openServer();
+		
 		Scanner scan = new Scanner(System.in);
 		StringTokenizer st;
 
@@ -22,7 +24,6 @@ public class MainConsole {
 			
 			order = st.nextToken();
 			
-			
 			switch(order){
 			case "add" :
 				name = st.nextToken();
@@ -35,6 +36,10 @@ public class MainConsole {
 					name = name + " " + st.nextToken();
 				}
 				s.setNotice(name); break;
+			case "exit":
+				scan.close();
+				NetServer.getInstance().closeServer();
+				return;
 			default :
 				System.out.println("잘못된 입력입니다.");
 			}
