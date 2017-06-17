@@ -140,8 +140,10 @@ public class ScheduleManager {
 			System.out.println("not exist ID.");
 			return;
 		} else {
-			ID[IDNUM] = null;
-			
+			//ID[IDNUM] = null;
+			for (int i = IDNUM; i < ID.length - 1; i++) {
+				ID[i] = ID[i + 1];
+			}
 			// delete existing elements.
 			for(int i = 0; i < TIMENUM; i++)
 				for(int j = 0 ; j < DATENUM; j++){
@@ -260,11 +262,14 @@ public class ScheduleManager {
 	/* return : update된 short형 인자							  							*/
 	/************************************************************************************/ 
 	  private short cleanID(short sc,int id){ 
-
-		  if(isFilledTime(sc,id))
-			  return (short) (sc-(1<<id));
-		  else
-			  return sc;
+		  short result = sc;
+		  result = (short) (result >> 1);
+		  for (int i = 0; i < id; i++)
+			  if(isFilledTime(sc,i))
+				  result =  (short) (result | (1<<i));
+		 // else
+			//  return sc;
+		  return result;
 	  }
 	 
 
