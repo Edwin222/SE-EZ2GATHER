@@ -147,8 +147,8 @@ public class ScheduleManager {
 			// delete existing elements.
 			for(int i = 0; i < TIMENUM; i++)
 				for(int j = 0 ; j < DATENUM; j++){
-					organizedSchedule[i][j] = cleanID(organizedSchedule[i][j],IDNUM);
-					organizedFixedSchedule[i][j] = cleanID(organizedFixedSchedule[i][j],IDNUM);
+					organizedSchedule[i][j] = removeID(organizedSchedule[i][j],IDNUM);
+					organizedFixedSchedule[i][j] = removeID(organizedFixedSchedule[i][j],IDNUM);
 				}
 		}
 		updateCommonList();
