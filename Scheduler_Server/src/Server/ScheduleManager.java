@@ -222,6 +222,12 @@ public class ScheduleManager {
 	/************************************************************************************************/
 	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx, int personNum) {
 		
+		for(int i=0;i<DATENUM;i++){
+			for(int j=0;j<TIMENUM;j++){
+				organizedFixedSchedule[j][i] = (short) (cleanID(organizedFixedSchedule[j][i],(IDidx)) + (short) (1 << (IDidx)));
+			}
+		}
+		
 		for(int i=0;i<fsc.size();i++){
 			FixedScheduleUnit target = fsc.get(i);
 			
@@ -231,16 +237,7 @@ public class ScheduleManager {
 					for(int k=0;k<TIMENUM;k++){
 						if(k >= target.getBegin() && k <= target.getEnd()){
 							organizedFixedSchedule[k][j] = (short) (cleanID(organizedFixedSchedule[k][j],IDidx));
-						} else {
-							organizedFixedSchedule[k][j] = (short) (cleanID(organizedSchedule[i][j],(IDidx)) + (short) (1 << (IDidx)));
 						}
-						
-					}
-					
-					
-					
-					for(int k=target.getBegin(); k <= target.getEnd(); k++){
-						
 					}
 					
 				}
