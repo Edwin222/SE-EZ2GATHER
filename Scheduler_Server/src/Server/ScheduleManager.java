@@ -11,7 +11,7 @@ public class ScheduleManager {
 
 	// IDpart instance
 	private String ID[] = new String[MAXIDNUM];
-
+	
 	// common schedule
 	private Day today;
 	private Day[] days;
@@ -200,7 +200,6 @@ public class ScheduleManager {
 	/* return : none										  							*/
 	/************************************************************************************/
 	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx, int personNum) {
-																						   													 
 		updateFixedSchedule(fsc, (personNum -1 - IDidx), personNum);
 
 		for (int i = 0; i < TIMENUM; i++)
