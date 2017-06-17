@@ -134,7 +134,7 @@ public class ScheduleManager {
 	/* 				commonSchedule의 해당 idx의 1값을 delete한다. 										*/
 	/* return : none										  									*/
 	/********************************************************************************************/
-	public void deleteID(String id) {
+	public void deleteID(String id, int personNum) {
 		int IDNUM = isIDexist(id);
 		if (IDNUM == -1) {
 			System.out.println("not exist ID.");
@@ -147,8 +147,8 @@ public class ScheduleManager {
 			// delete existing elements.
 			for(int i = 0; i < TIMENUM; i++)
 				for(int j = 0 ; j < DATENUM; j++){
-					organizedSchedule[i][j] = removeID(organizedSchedule[i][j],IDNUM);
-					organizedFixedSchedule[i][j] = removeID(organizedFixedSchedule[i][j],IDNUM);
+					organizedSchedule[i][j] = removeID(organizedSchedule[i][j],IDNUM, personNum);
+					organizedFixedSchedule[i][j] = removeID(organizedFixedSchedule[i][j], IDNUM, personNum);
 				}
 		}
 		updateCommonList();
@@ -269,14 +269,15 @@ public class ScheduleManager {
 	/* process :	shot형 인자애서 id의 idx애 값이 있는지 확인후 있으면 지우고 없으면 그대로 반환			*/
 	/* return : update된 short형 인자							  							*/
 	/************************************************************************************/ 
-	  private short removeID(short sc,int id){ 
+	  private short removeID(short sc,int id, int personNum){ 
+		  id = personNum - 1 - id;
 		  short result = sc;
 		  result = (short) (result >> 1);
 		  for (int i = 0; i < id; i++)
 			  if(isFilledTime(sc,i))
 				  result =  (short) (result | (1<<i));
-		 // else
-			//  return sc;
+			  else
+				  result = (short) (result & (1<<i));
 		  return result;
 	  }
 	  private short cleanID(short sc,int id){ 

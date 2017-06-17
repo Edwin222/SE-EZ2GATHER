@@ -118,7 +118,7 @@ public class ScheduleServer {
 	/* return : none										  							*/	
 	/************************************************************************************/
 	public void deleteID(String id) {
-		Schedule.deleteID(id);
+		Schedule.deleteID(id, personNum());
 		updateCommonSchedule();
 	}
 	
