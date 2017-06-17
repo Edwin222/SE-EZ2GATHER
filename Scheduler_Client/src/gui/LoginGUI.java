@@ -170,7 +170,7 @@ public class LoginGUI {
 				JOptionPane.showMessageDialog(null, "Please check IP, PORT or ID", "error", JOptionPane.OK_OPTION);
 			}
 			else {			//login S
-				SchedulerGUI Scheduler = new SchedulerGUI();
+				SchedulerGUI Scheduler = new SchedulerGUI(netClient);
 				Scheduler.launchSceduler(netClient);
 			}
 		}

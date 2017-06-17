@@ -40,7 +40,7 @@ public class UserManager {
 		isModified = false;
 		FixedSchedule = new ArrayList<FixedScheduleUnit>();
 		people = new ArrayList<Integer>();
-		
+		notice = "";
 		ID = _ID;
 		findDay = new Day[COL];
 		

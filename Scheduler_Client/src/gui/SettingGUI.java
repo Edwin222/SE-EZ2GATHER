@@ -124,7 +124,7 @@ public class SettingGUI {
 		
 		JTextPane textPane = new JTextPane();
 		textPane.setEditable(false);
-		textPane.setText("공지사항 받아와서 출력하기");
+		textPane.setText("공지사항:" + netClient.getManager().getNotice());
 		textPane.setBounds(200, 17, 500, 25);
 		frame.getContentPane().add(textPane);
 		panel.setVisible(true);
@@ -422,7 +422,7 @@ public class SettingGUI {
 			} else {
 				frame.dispose();
 				netClient.getManager().cancel_Edit();
-				SchedulerGUI scgui = new SchedulerGUI();
+				SchedulerGUI scgui = new SchedulerGUI(netClient);
 				scgui.launchSceduler(netClient);
 			}
 		}

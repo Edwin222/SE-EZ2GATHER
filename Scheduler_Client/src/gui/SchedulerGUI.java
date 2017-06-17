@@ -297,7 +297,7 @@ public class SchedulerGUI {
 			netClient.getManager().Open_Edit();
 			frame.dispose();
 			
-			SettingGUI sgui = new SettingGUI();
+			SettingGUI sgui = new SettingGUI(netClient);
 			sgui.launchSceduler(netClient);
 		}
 
