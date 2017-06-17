@@ -237,12 +237,6 @@ public class ScheduleManager {
 						
 					}
 					
-					
-					
-					for(int k=target.getBegin(); k <= target.getEnd(); k++){
-						
-					}
-					
 				}
 			}
 			
