@@ -222,24 +222,25 @@ public class ScheduleManager {
 	/************************************************************************************************/
 	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx, int personNum) {
 		
-		for(int i=0;i<TIMENUM;i++){
-			for(int j=0;j<DATENUM;j++){
-				
-				for(int k=0;k<personNum;k++){
-					organizedFixedSchedule[i][j] += (short) ( 1 << k);
-				}
-				
-			}
-		}
-		
 		for(int i=0;i<fsc.size();i++){
 			FixedScheduleUnit target = fsc.get(i);
 			
 			for(int j=0;j<DATENUM;j++){
 				if(target.getDay() == days[j]){
 					
+					for(int k=0;k<TIMENUM;k++){
+						if(k >= target.getBegin() && k <= target.getEnd()){
+							organizedFixedSchedule[k][j] = (short) (cleanID(organizedFixedSchedule[k][j],IDidx));
+						} else {
+							organizedFixedSchedule[k][j] = (short) (cleanID(organizedSchedule[i][j],(IDidx)) + (short) (1 << (IDidx)));
+						}
+						
+					}
+					
+					
+					
 					for(int k=target.getBegin(); k <= target.getEnd(); k++){
-						organizedFixedSchedule[k][j] = (short) (cleanID(organizedFixedSchedule[k][j],IDidx));
+						
 					}
 					
 				}
