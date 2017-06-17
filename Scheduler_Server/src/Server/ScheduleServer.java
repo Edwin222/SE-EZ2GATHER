@@ -39,7 +39,7 @@ public class ScheduleServer {
 	/* process :	오늘날짜정보를 이용하여 Day type을 찾기.											*/
 	/* return : 오늘날짜의 Day type								  								*/
 	/****************************************************************************************/
-	private Day getDateDay() {// find today.
+	public Day getDateDay() {// find today.
 
 		Day day = null;
 	    Calendar cal = Calendar.getInstance() ;
@@ -148,7 +148,7 @@ public class ScheduleServer {
 		int IDidx = Schedule.isIDexist(id);
 
 		if (IDidx != -1){
-			Schedule.updateSchedule(PersonalFixedSchedule, schedule, IDidx);
+			Schedule.updateSchedule(PersonalFixedSchedule, schedule, IDidx, personNum());
 			updateCommonSchedule();
 		}
 

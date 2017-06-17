@@ -75,6 +75,7 @@ public class NetServer {
 							
 							obj_out.writeObject(sServer.getCommonSchedule());
 							obj_out.writeObject(sServer.getIdList());
+							obj_out.writeObject(sServer.getDateDay());
 							sock_out.writeUTF(sServer.getNotice());
 							sock_out.writeInt(sServer.personNum());
 							obj_out.close();
@@ -103,6 +104,7 @@ public class NetServer {
 							
 							obj_out.writeObject(sServer.getCommonSchedule());
 							obj_out.writeObject(sServer.getIdList());
+							obj_out.writeObject(sServer.getDateDay());
 							sock_out.writeUTF(sServer.getNotice());
 							sock_out.writeInt(sServer.personNum());
 							

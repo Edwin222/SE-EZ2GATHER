@@ -224,15 +224,15 @@ public class SchedulerGUI {
 			
 			//600, 350
 			for (int j = 0; j < 6; j++) {
-				people = netClient.getManager().show_organized_table(0, j);
+				people = netClient.getManager().show_organized_table(0,j);
 				for (int i = 0; i < personNumber; i++) {
 					if (people.get(i).equals(1))
 						g.drawImage(p[i+1], (j * 100) + (i * 9) + 6, 0 + 6, 7, 7, this);
 				}
 				//begin = 0;
 				for (int i = 1; i < 12; i++) {
-					people = netClient.getManager().show_organized_table(i, j);
-					oldPeople = netClient.getManager().show_organized_table(i-1, j);
+					people = netClient.getManager().show_organized_table(i,j);
+					oldPeople = netClient.getManager().show_organized_table(i-1,j);
 					if (!people.equals(oldPeople)) {
 						g.drawImage(cellFrame, j * 100, i * (350 / 12)-2, 100, 4, this);
 						for (int k = 0; k < personNumber; k++) {

@@ -13,20 +13,25 @@ public class ScheduleManager {
 	private String ID[] = new String[MAXIDNUM];
 
 	// common schedule
+	private Day today;
+	private Day[] days;
 	private ArrayList<DaySchedule> commonSchedule;
 	private short organizedFixedSchedule[][] = new short[TIMENUM][DATENUM];
 	private short organizedSchedule[][] = new short[TIMENUM][DATENUM];
 
 	// constructor
 	public ScheduleManager(Day today) {
+		
 		commonSchedule = new ArrayList<DaySchedule>();
-		initializing(today);
+		this.today = today;
+		initializing();
 	}
 
 	public ScheduleManager(String id[],Day today) {  
 		commonSchedule = new ArrayList<DaySchedule>();
 		ID = id;
-		initializing(today);
+		this.today = today;
+		initializing();
 	}
 
 	/**************************************************************/
@@ -35,25 +40,18 @@ public class ScheduleManager {
 	/* process : 현재날짜의 Day type을 받아 commonSchdule을 생성                  */
 	/* return : none                     						  */
 	/**************************************************************/
-	public void initializing(Day today) {	// check today's day and initialize depends on it.
-		int i;
+	public void initializing() {	// check today's day and initialize depends on it.
+
+		days = new Day[7];
+		Day cursor = today;
 		
-		Day[] day = new Day[7];
-		
-		day[0] = Day.MON;
-		day[1] = Day.TUE;
-		day[2] = Day.WED;
-		day[3] = Day.THU;
-		day[4] = Day.FRI;
-		day[5] = Day.SAT;
-		day[6] = Day.SUN;
-		
-		for(i = 0;i < 7; i++)
-			if(day[i] == today)
-				break;
+		for(int i=0;i<7;i++){
+			days[i] = cursor;
+			cursor = Day.getNextDay(cursor);
+		}
 		
 		for(int k = 0;k < 7; k++)	
-			commonSchedule.add(new DaySchedule(day[(i+k)%7]));
+			commonSchedule.add(new DaySchedule(days[k]));
 			
 	}
  
@@ -199,17 +197,18 @@ public class ScheduleManager {
 	/* 				update된 FixedSchedule, Schedule을 이용하여 commonList update.			*/
 	/* return : none										  							*/
 	/************************************************************************************/
-	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx) {
+	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx, int personNum) {
 																						   													 
-		updateFixedSchedule(fsc, IDidx);
+		updateFixedSchedule(fsc, (personNum -1 - IDidx));
 
 		for (int i = 0; i < TIMENUM; i++)
 			for (int j = 0; j < DATENUM; j++)
-				if (sc[i][j] != 0)
-					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],IDidx) + (short) (1 << IDidx));
+				if (sc[i][j] == 0)
+					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],(personNum -1 - IDidx)) + (short) (1 << (personNum -1 - IDidx)));
 				else
-					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],IDidx));
+					organizedSchedule[i][j] = (short) (cleanID(organizedSchedule[i][j],(personNum -1 - IDidx)));
 
+		
 		updateCommonList();
 	}
 	/************************************************************************************************/
@@ -220,60 +219,25 @@ public class ScheduleManager {
 	/* return : none										  										*/
 	/************************************************************************************************/
 	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx) {
-		int Fsize;
 		
-		if(fsc != null)
-		 Fsize = fsc.size();
-		
-		else
-			return;
-		
-		for (int j = 0; j < TIMENUM; j++)
-			for (int k = 0; k < DATENUM; k++)
-				organizedFixedSchedule[j][k] = (short) (cleanID(organizedFixedSchedule[j][k],IDidx));
-		
-		for (int i = 0; i < Fsize; i++)
-			switch (fsc.get(i).getDay()) {
-			case MON:
-				fillFixedSchedule(fsc.get(i), 0, IDidx);
-				break;
-			case TUE:
-				fillFixedSchedule(fsc.get(i), 1, IDidx);
-				break;
-			case WED:
-				fillFixedSchedule(fsc.get(i), 2, IDidx);
-				break;
-			case THU:
-				fillFixedSchedule(fsc.get(i), 3, IDidx);
-				break;
-			case FRI:
-				fillFixedSchedule(fsc.get(i), 4, IDidx);
-				break;
-			case SAT:
-				fillFixedSchedule(fsc.get(i), 5, IDidx);
-				break;
-			case SUN:
-				fillFixedSchedule(fsc.get(i), 6, IDidx);
-				break;
-			default:
-				break;
+		for(int i=0;i<fsc.size();i++){
+			FixedScheduleUnit target = fsc.get(i);
+			
+			for(int j=0;j<DATENUM;j++){
+				if(target.getDay() == days[j]){
+					
+					for(int k=target.getBegin(); k <= target.getEnd(); k++){
+						organizedFixedSchedule[k][j] = (short) (cleanID(organizedSchedule[k][j],IDidx));
+					}
+					
+				}
 			}
+			
+		}
+		
+		
 	}
 
-	/************************************************************************************/
-	/* fillFixedSchedule	       		   					   					   		*/
-	/* input : FixedScheduleUnit, 요일 idx, id idx						 				*/
-	/* process : 	FixedScheduleUnit의 내용을 읽어 해당 id애다가 넣어준다.		  				*/
-	/* 				scheduleTable이용하여 현재 scheduleTable update.							*/
-	/* 				update된 FixedSchedule, Schedule을 이용하여 commonList update.			*/
-	/* return : none										  							*/
-	/************************************************************************************/
-	private void fillFixedSchedule(FixedScheduleUnit f, int Dayidx, int IDidx) {
-		for (int i = f.getBegin(); i < f.getEnd() + 1; i++){
-			organizedFixedSchedule[i][Dayidx] = (short) (cleanID(organizedFixedSchedule[i][Dayidx],IDidx) + (short) (1 << IDidx));
-		}
-	}
-	
 	/************************************************************************************/
 	/* isFilledTime	       		   					   					   				*/
 	/* input : short형 인자, id의 idx										 				*/
@@ -313,31 +277,7 @@ public class ScheduleManager {
 	public void updateCommonList() {//find commonSchedule's day and set proper table.
 		for (int i = 0; i < DATENUM; i++)
 			for(int j = 0; j < TIMENUM; j++)
-			switch (commonSchedule.get(i).getDay()) {
-			case MON:
-				commonSchedule.get(i).setScheduleUnit(organizedSchedule[j][0],j);
-				break;
-			case TUE:
-				commonSchedule.get(i).setScheduleUnit(organizedSchedule[j][1],j);
-				break;
-			case WED:
-				commonSchedule.get(i).setScheduleUnit(organizedSchedule[j][2],j);
-				break;
-			case THU:
-				commonSchedule.get(i).setScheduleUnit(organizedSchedule[j][3],j);
-				break;
-			case FRI:
-				commonSchedule.get(i).setScheduleUnit(organizedSchedule[j][4],j);
-				break;
-			case SAT:
-				commonSchedule.get(i).setScheduleUnit(organizedSchedule[j][5],j);
-				break;
-			case SUN:
-				commonSchedule.get(i).setScheduleUnit(organizedSchedule[j][6],j);
-				break;
-			default:
-				break;
-			}
+				commonSchedule.get(i).setScheduleUnit((short) (organizedSchedule[j][i] & organizedFixedSchedule[j][i]), j);
 	}
 
 	/************************************************************************************/

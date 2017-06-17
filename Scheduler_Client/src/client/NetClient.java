@@ -1,6 +1,9 @@
 package client;
 
 import java.net.*;
+
+import common.Day;
+
 import java.io.*;
 
 
@@ -55,6 +58,7 @@ public class NetClient {
 					
 					short[][] table = (short[][]) obj_in.readObject();
 					String[] idList = (String[]) obj_in.readObject();
+					Day day = (Day) obj_in.readObject();
 					String notice = sock_in.readUTF();
 					int personNum = sock_in.readInt();
 					
@@ -62,6 +66,7 @@ public class NetClient {
 					manager.setIDlist(idList);
 					manager.setNotice(notice);
 					manager.setPersonNum(personNum);
+					manager.setDay(day);
 					
 					obj_in.close();
 					
@@ -85,13 +90,16 @@ public class NetClient {
 					
 					short[][] table = (short[][]) obj_in.readObject();
 					String[] idList = (String[]) obj_in.readObject();
+					Day day = (Day) obj_in.readObject();
 					String notice = sock_in.readUTF();
 					int personNum = sock_in.readInt();
+					
 					
 					manager.setOTable(table);
 					manager.setIDlist(idList);
 					manager.setNotice(notice);
 					manager.setPersonNum(personNum);
+					manager.setDay(day);
 					
 					obj_in.close();
 					obj_out.close();

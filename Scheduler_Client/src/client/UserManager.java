@@ -145,9 +145,12 @@ public class UserManager {
 	
 	public void add_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) {
 		
-		FixedSchedule.add(schedule); //占쏙옙占쏙옙占쏙옙占쏙옙占쌕몌옙臼占� 占쏙옙占싹깍옙
-		isModified = true;
+		for(int i=start_pos; i<=end_pos; i++){
+			FixedScheduleUnit newSchedule = new FixedScheduleUnit(schedule.getBegin(), schedule.getEnd(), findDay[i]);
+			FixedSchedule.add(newSchedule); //占쏙옙占쏙옙占쏙옙占쏙옙占쌕몌옙臼占� 占쏙옙占싹깍옙
+		}
 		
+		isModified = true;
 	}
 	
 	public void remove_FixedSchedule(FixedScheduleUnit schedule, int start_pos, int end_pos) 
@@ -189,6 +192,11 @@ public class UserManager {
 		temporaryTable = personalTable;
 	}
 	
+	public void cancel_Edit(){
+		temporaryTable = personalTable;
+		isModified = false;
+	}
+	
 	public boolean Check_Edited()
 	{
 		return isModified;
@@ -204,6 +212,13 @@ public class UserManager {
 		
 		personalTable = newPTable;
 		organizedTable = newOTable;
+	}
+	
+	public void setDay(Day today){
+		for(int i=0; i< COL ;i++){
+			findDay[i] = today;
+			today = Day.getNextDay(today);
+		}
 	}
 	
 	public Day getday(int today) {
@@ -247,7 +262,9 @@ public class UserManager {
 	public ArrayList<Integer> show_organized_table(int i, int j)
 	{
 
-		for(int k=0; k<IDlist.length; k++)
+		people = new ArrayList<Integer>();
+		
+		for(int k=personNum-1; k >= 0; k--)
 			{
 				if(check_schedule((organizedTable[i][j]), k)){
 					people.add(1);
