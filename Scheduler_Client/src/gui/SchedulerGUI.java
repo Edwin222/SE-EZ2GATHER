@@ -248,6 +248,7 @@ public class SchedulerGUI {
 	}
 	class RefreshClick implements MouseListener {
 
+		
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
@@ -258,11 +259,13 @@ public class SchedulerGUI {
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
 			netClient.connectToServer();
-			netClient.sendMessage("RENEWAL");
+			netClient.sendMessage("REFRESH");
 			netClient.endConnection();
 			
-			frame.setVisible(false);
-			frame.setVisible(true);
+			frame.dispose();
+			SchedulerGUI sgui = new SchedulerGUI(netClient);
+			sgui.launchSceduler(netClient);
+			
 		}
 
 		@Override
@@ -284,7 +287,12 @@ public class SchedulerGUI {
 		}
 	}
 	class SettingClick implements MouseListener {
-
+		boolean clicked;
+		
+		public SettingClick(){
+			clicked = false;
+		}
+		
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
@@ -292,13 +300,22 @@ public class SchedulerGUI {
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {
+		synchronized public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			netClient.getManager().Open_Edit();
-			frame.dispose();
+			if(!clicked)
+				clicked = true;
+			else return;
 			
-			SettingGUI sgui = new SettingGUI(netClient);
-			sgui.launchSceduler(netClient);
+			if(clicked){
+				netClient.getManager().Open_Edit();
+				frame.dispose();
+				
+				SettingGUI sgui = new SettingGUI(netClient);
+				sgui.launchSceduler(netClient);
+				
+				clicked = false;
+			}
+			
 		}
 
 		@Override

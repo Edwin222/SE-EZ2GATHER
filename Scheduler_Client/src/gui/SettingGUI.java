@@ -41,6 +41,7 @@ public class SettingGUI {
 			public void run() {
 				try {
 					SettingGUI window = new SettingGUI();
+					window.frame.setVisible(false);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -68,6 +69,7 @@ public class SettingGUI {
 				SettingGUI window = new SettingGUI(nc);
 				window.frame.setVisible(false);
 				window.frame.setVisible(true);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -83,7 +85,7 @@ public class SettingGUI {
 	public SettingGUI() {
 		initialize();
 	}
-	
+
 	private void initialize() {
 		command = TEMP_PLUS;
 		
@@ -92,6 +94,7 @@ public class SettingGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.getContentPane().setLayout(null);
+
 		MyPanel panel = new MyPanel();
 		ButtonPanel bPanel = new ButtonPanel();
 		SchedulePanel sPanel = new SchedulePanel();
@@ -127,6 +130,7 @@ public class SettingGUI {
 		textPane.setText("공지사항:" + netClient.getManager().getNotice());
 		textPane.setBounds(200, 17, 500, 25);
 		frame.getContentPane().add(textPane);
+		
 		panel.setVisible(true);
 		bPanel.setVisible(true);
 		sPanel.setVisible(false);
@@ -353,7 +357,7 @@ public class SettingGUI {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			netClient.getManager().save();
+			netClient.getManager().save_Edit();
 			netClient.connectToServer();
 			netClient.sendMessage("SAVE");
 			netClient.endConnection();
@@ -401,7 +405,7 @@ public class SettingGUI {
 				int selected = JOptionPane.showConfirmDialog(null, "저장하시겠습니까?", "Save", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 				switch(selected){
 				case JOptionPane.YES_OPTION:
-					netClient.getManager().save();
+					netClient.getManager().save_Edit();
 					netClient.connectToServer();
 					netClient.sendMessage("SAVE");
 					netClient.endConnection();
@@ -409,7 +413,7 @@ public class SettingGUI {
 				case JOptionPane.NO_OPTION:
 					frame.dispose();
 					netClient.getManager().cancel_Edit();
-					SchedulerGUI scgui = new SchedulerGUI();
+					SchedulerGUI scgui = new SchedulerGUI(netClient);
 					scgui.launchSceduler(netClient);
 					break;
 					

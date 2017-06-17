@@ -8,6 +8,7 @@ public class MainConsole {
 	
 	public static void main(String args[]){
 
+		boolean isModified = false;
 		NetServer.getInstance().openServer();
 		
 		Scanner scan = new Scanner(System.in);
@@ -15,7 +16,7 @@ public class MainConsole {
 
 		String command;
 		String order;
-		String name = null;
+		String name = "";
 		
 		NetServer.getInstance().getServer().loadData();
 		
@@ -27,12 +28,16 @@ public class MainConsole {
 			
 			switch(order){
 			case "add" :
+				isModified = true;
 				name = st.nextToken();
 				NetServer.getInstance().getServer().makeID(name); break;
 			case "delete" :
+				isModified = true;
 				name = st.nextToken();
 				NetServer.getInstance().getServer().deleteID(name); break;
 			case "notice" :
+				isModified = true;
+				name = st.nextToken();
 				while(st.hasMoreTokens()){
 					name = name + " " + st.nextToken();
 				}
@@ -42,7 +47,20 @@ public class MainConsole {
 							System.out.println("delete <IDNAME> : delete ID from IDLIST");
 							System.out.println("notice <NOTICE CONTENT> : set NOTICE");
 							System.out.println("printID : print ID names in IDLIST ");
-			case "exit" : case "save":
+							break;
+			case "exit" : 
+				if(isModified){
+					System.out.print("Do you save your Data?(Y/N):");
+					String cmd = scan.next();
+					
+					if(cmd.equals("Y")){
+						NetServer.getInstance().getServer().saveData();
+					}
+				}
+				NetServer.getInstance().closeServer();
+				return;
+			case "save":
+				isModified = false;
 				NetServer.getInstance().getServer().saveData(); break;
 			case "screen" : NetServer.getInstance().getServer().Screen(); break;
 			default :

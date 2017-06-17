@@ -19,7 +19,7 @@ public class NetClient {
 		this.port = port;
 		
 		manager = new UserManager(ID);
-		manager.loadData();
+		manager.loadData(ID);
 	}
 	
 	public UserManager getManager(){
@@ -80,6 +80,7 @@ public class NetClient {
 				
 				msg = sock_in.readUTF();
 				if(msg.equals("SUCCESS")){
+					manager.saveData(manager.getID());
 					
 					ObjectOutputStream obj_out = new ObjectOutputStream(socket.getOutputStream());
 					

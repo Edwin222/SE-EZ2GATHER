@@ -127,6 +127,9 @@ public class NetServer {
 						
 						System.out.println("Client Disconnected : " + client_socket.getInetAddress());
 						
+					} catch(SocketException e){
+						return;
+						
 					} catch(Exception e){
 						e.printStackTrace();
 						
@@ -142,7 +145,10 @@ public class NetServer {
 	
 	public void closeServer(){
 		try {
-			threadPool.shutdown();
+			for(int i=0;i<THREAD_NUM;i++){
+				threadPool.shutdownNow();
+			}
+			
 			server.close();
 		} catch(Exception e) {
 			e.printStackTrace();

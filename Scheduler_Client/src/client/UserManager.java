@@ -37,15 +37,17 @@ public class UserManager {
 	
 	public UserManager(String _ID){
 		
+		loadData(ID);
+		
 		isModified = false;
-		FixedSchedule = new ArrayList<FixedScheduleUnit>();
+		
 		people = new ArrayList<Integer>();
 		notice = "";
 		ID = _ID;
 		findDay = new Day[COL];
 		
 		organizedTable = new short[ROW][COL];
-		personalTable = new short[ROW][COL];
+		
 		temporaryTable = new short[ROW][COL];
 	}
 	
@@ -81,13 +83,14 @@ public class UserManager {
 		personNum = num;
 	}
 	
-	public void saveData(){
+	public void saveData(String ID){
 		
 		try {
-			FileOutputStream fp = new FileOutputStream("data.bin");
+			FileOutputStream fp = new FileOutputStream(ID + "data.bin");
 			ObjectOutputStream op = new ObjectOutputStream(fp);
 			
 			op.writeObject(FixedSchedule);
+			op.writeObject(personalTable);
 			
 			op.close();
 		} catch(Exception e){
@@ -95,16 +98,19 @@ public class UserManager {
 		}
 	}
 	
-	public void loadData(){
+	public void loadData(String ID){
 		try {
-			FileInputStream fp = new FileInputStream("data.bin");
+			FileInputStream fp = new FileInputStream(ID + "data.bin");
 			ObjectInputStream op = new ObjectInputStream(fp);
 			
 			FixedSchedule = ( ArrayList<FixedScheduleUnit>) op.readObject();
+			personalTable = (short[][]) op.readObject();
 			
 			op.close();
 			
 		} catch(FileNotFoundException e){
+			FixedSchedule = new ArrayList<FixedScheduleUnit>();
+			personalTable = new short[ROW][COL];
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -180,10 +186,14 @@ public class UserManager {
 		isModified = true;
 	}
 
-	public void save() {
+	public void save_Edit() {
 
 
-		personalTable = temporaryTable;
+		for(int i=0;i<ROW;i++){
+			for(int j=0;j<COL;j++){
+				personalTable[i][j] = temporaryTable[i][j];
+			}
+		}
 		
 		isModified = false;
 		
@@ -191,11 +201,19 @@ public class UserManager {
 	
 	public void Open_Edit()
 	{
-		temporaryTable = personalTable;
+		for(int i=0;i<ROW;i++){
+			for(int j=0;j<COL;j++){
+				temporaryTable[i][j] = personalTable[i][j];
+			}
+		}
 	}
 	
 	public void cancel_Edit(){
-		temporaryTable = personalTable;
+		for(int i=0;i<ROW;i++){
+			for(int j=0;j<COL;j++){
+				temporaryTable[i][j] = personalTable[i][j];
+			}
+		}
 		isModified = false;
 	}
 	

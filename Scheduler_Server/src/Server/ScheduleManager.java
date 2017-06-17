@@ -199,7 +199,7 @@ public class ScheduleManager {
 	/************************************************************************************/
 	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx, int personNum) {
 																						   													 
-		updateFixedSchedule(fsc, (personNum -1 - IDidx));
+		updateFixedSchedule(fsc, (personNum -1 - IDidx), personNum);
 
 		for (int i = 0; i < TIMENUM; i++)
 			for (int j = 0; j < DATENUM; j++)
@@ -218,7 +218,17 @@ public class ScheduleManager {
 	/* 				그후 FixedScheduleUnit하나하나를 읽어오면서 해당 내용을 organizedFixedUnit애 업대이트			*/
 	/* return : none										  										*/
 	/************************************************************************************************/
-	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx) {
+	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx, int personNum) {
+		
+		for(int i=0;i<TIMENUM;i++){
+			for(int j=0;j<DATENUM;j++){
+				
+				for(int k=0;k<personNum;k++){
+					organizedFixedSchedule[i][j] += (short) ( 1 << k);
+				}
+				
+			}
+		}
 		
 		for(int i=0;i<fsc.size();i++){
 			FixedScheduleUnit target = fsc.get(i);
