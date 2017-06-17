@@ -53,7 +53,9 @@ public class UserManager {
 	{
 		return ID;
 	}
-	
+	public String getNotice(){
+		return notice;
+	}
 	
 	public void setNotice(String _notice)
 	{

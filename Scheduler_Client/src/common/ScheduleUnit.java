@@ -1,6 +1,8 @@
 package common;
 
-public class ScheduleUnit {
+import java.io.Serializable;
+
+public class ScheduleUnit implements Serializable {
 	private int timeBegin;
 	private int timeEnd;
 	

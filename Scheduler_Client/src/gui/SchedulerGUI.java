@@ -40,6 +40,7 @@ public class SchedulerGUI {
 			public void run() {
 				try {
 					SchedulerGUI window = new SchedulerGUI();
+					window.frame.setVisible(false);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,6 +65,7 @@ public class SchedulerGUI {
 			// TODO Auto-generated method stub
 			try {
 				SchedulerGUI window = new SchedulerGUI(nc);
+				window.frame.setVisible(false);
 				window.frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -115,7 +117,7 @@ public class SchedulerGUI {
 		//frame.getContentPane().add(joinableComp); erase
 		
 		noticeTextPane.setEditable(false);
-		noticeTextPane.setText(notice);
+		noticeTextPane.setText(notice + netClient.getManager().getNotice());
 		noticeTextPane.setFont(new Font(Font.DIALOG,0,20));
 		noticeTextPane.setBackground(frame.getBackground());
 		noticeTextPane.setBounds(50, 30, 500, 30);

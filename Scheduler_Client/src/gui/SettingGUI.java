@@ -66,6 +66,7 @@ public class SettingGUI {
 			try {
 				
 				SettingGUI window = new SettingGUI(nc);
+				window.frame.setVisible(false);
 				window.frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();

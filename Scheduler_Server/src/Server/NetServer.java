@@ -50,84 +50,87 @@ public class NetServer {
 		Runnable task = new Runnable(){
 			@Override
 			public void run(){
-				System.out.println("Waiting Client in " + Thread.currentThread().getName() + "...");
-				try {
-					Socket client_socket = server.accept();
-					//after connection
-					System.out.println("Client Connected : " + client_socket.getInetAddress());
-					
-					DataOutputStream sock_out = new DataOutputStream(client_socket.getOutputStream());
-					DataInputStream sock_in = new DataInputStream(client_socket.getInputStream());
-					
-					//in & out execute
-					String msg = sock_in.readUTF();
-					
-					if(msg.equals("LOGIN") || msg.equals("REFRESH")){
-						// LOGIN & REFRESH : check date & send table information						
-
-						String ID = sock_in.readUTF();
+				while (true){
+					System.out.println("Waiting Client in " + Thread.currentThread().getName() + "...");
+					try {
+						Socket client_socket = server.accept();
+						//after connection
+						System.out.println("Client Connected : " + client_socket.getInetAddress());
 						
-						if(sServer.checkID(ID)){ //login s
-							sock_out.writeUTF("SUCCESS");
-							sServer.nextDay();
+						DataOutputStream sock_out = new DataOutputStream(client_socket.getOutputStream());
+						DataInputStream sock_in = new DataInputStream(client_socket.getInputStream());
+						
+						//in & out execute
+						String msg = sock_in.readUTF();
+						
+						if(msg.equals("LOGIN") || msg.equals("REFRESH")){
+							// LOGIN & REFRESH : check date & send table information						
+	
+							String ID = sock_in.readUTF();
 							
-							ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
+							if(sServer.checkID(ID)){ //login s
+								sock_out.writeUTF("SUCCESS");
+								sServer.nextDay();
+								
+								ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
+								
+								obj_out.writeObject(sServer.getCommonSchedule());
+								obj_out.writeObject(sServer.getIdList());
+								obj_out.writeObject(sServer.getDateDay());
+								sock_out.writeUTF(sServer.getNotice());
+								sock_out.writeInt(sServer.personNum());
+								
+								obj_out.close();
+								
+							} else { //login f
+								sock_out.writeUTF("FAIL");
+							}
+						
+						} else if(msg.equals("SAVE")){
+							// SAVE : check date & modify table information & send table information
 							
-							obj_out.writeObject(sServer.getCommonSchedule());
-							obj_out.writeObject(sServer.getIdList());
-							obj_out.writeObject(sServer.getDateDay());
-							sock_out.writeUTF(sServer.getNotice());
-							sock_out.writeInt(sServer.personNum());
-							obj_out.close();
+							String ID = sock_in.readUTF();
 							
-						} else { //login f
-							sock_out.writeUTF("FAIL");
+							if(sServer.checkID(ID)){
+								sock_out.writeUTF("SUCCESS");
+								
+								ObjectInputStream obj_in = new ObjectInputStream(client_socket.getInputStream());
+								ArrayList<FixedScheduleUnit> fsu = (ArrayList<FixedScheduleUnit>) obj_in.readObject();
+								short[][] sch = (short[][]) obj_in.readObject();
+								
+								sServer.setcommonSchedule(ID, fsu, sch);
+								
+								sServer.nextDay();
+								
+								ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
+								
+								obj_out.writeObject(sServer.getCommonSchedule());
+								obj_out.writeObject(sServer.getIdList());
+								obj_out.writeObject(sServer.getDateDay());
+								sock_out.writeUTF(sServer.getNotice());
+								sock_out.writeInt(sServer.personNum());
+								
+								obj_in.close();
+								obj_out.close();
+								
+							} else {
+								sock_out.writeUTF("FAIL");
+							}
+							
 						}
+						
+						sock_out.close();
+						sock_in.close();
 					
-					} else if(msg.equals("SAVE")){
-						// SAVE : check date & modify table information & send table information
+						//end connection
+						client_socket.close();
 						
-						String ID = sock_in.readUTF();
+						System.out.println("Client Disconnected : " + client_socket.getInetAddress());
 						
-						if(sServer.checkID(ID)){
-							sock_out.writeUTF("SUCCESS");
-							
-							ObjectInputStream obj_in = new ObjectInputStream(client_socket.getInputStream());
-							ArrayList<FixedScheduleUnit> fsu = (ArrayList<FixedScheduleUnit>) obj_in.readObject();
-							short[][] sch = (short[][]) obj_in.readObject();
-							
-							sServer.setcommonSchedule(ID, fsu, sch);
-							
-							sServer.nextDay();
-							
-							ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
-							
-							obj_out.writeObject(sServer.getCommonSchedule());
-							obj_out.writeObject(sServer.getIdList());
-							obj_out.writeObject(sServer.getDateDay());
-							sock_out.writeUTF(sServer.getNotice());
-							sock_out.writeInt(sServer.personNum());
-							
-							obj_in.close();
-							obj_out.close();
-							
-						} else {
-							sock_out.writeUTF("FAIL");
-						}
+					} catch(Exception e){
+						e.printStackTrace();
 						
 					}
-					
-					sock_out.close();
-					sock_in.close();
-				
-					//end connection
-					client_socket.close();
-					
-					System.out.println("Client Disconnected : " + client_socket.getInetAddress());
-					
-				} catch(Exception e){
-					e.printStackTrace();
-					
 				}
 			}
 		};

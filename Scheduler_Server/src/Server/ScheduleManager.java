@@ -227,7 +227,7 @@ public class ScheduleManager {
 				if(target.getDay() == days[j]){
 					
 					for(int k=target.getBegin(); k <= target.getEnd(); k++){
-						organizedFixedSchedule[k][j] = (short) (cleanID(organizedSchedule[k][j],IDidx));
+						organizedFixedSchedule[k][j] = (short) (cleanID(organizedFixedSchedule[k][j],IDidx));
 					}
 					
 				}
