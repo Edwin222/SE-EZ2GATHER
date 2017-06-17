@@ -266,7 +266,7 @@ public class ScheduleManager {
 	/* process :	shot형 인자애서 id의 idx애 값이 있는지 확인후 있으면 지우고 없으면 그대로 반환			*/
 	/* return : update된 short형 인자							  							*/
 	/************************************************************************************/ 
-	  private short cleanID(short sc,int id){ 
+	  private short removeID(short sc,int id){ 
 		  short result = sc;
 		  result = (short) (result >> 1);
 		  for (int i = 0; i < id; i++)
@@ -276,7 +276,12 @@ public class ScheduleManager {
 			//  return sc;
 		  return result;
 	  }
-	 
+	  private short cleanID(short sc,int id){ 
+			  if(isFilledTime(sc,id))
+				  return (short) (sc - (1 <<id));//result =  (short) (result | (1<<i));
+		 else
+			return sc;
+	  }
 
 	/************************************************************************************/
 	/* updateCommonList	       					   					   					*/
