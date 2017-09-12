@@ -94,21 +94,20 @@ public class NetServer {
 							if(sServer.checkID(ID)){
 								sock_out.writeUTF("SUCCESS");
 								
+								ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
 								ObjectInputStream obj_in = new ObjectInputStream(client_socket.getInputStream());
+								
 								ArrayList<FixedScheduleUnit> fsu = (ArrayList<FixedScheduleUnit>) obj_in.readObject();
 								short[][] sch = (short[][]) obj_in.readObject();
-								
+
 								sServer.setcommonSchedule(ID, fsu, sch);
-								
-								sServer.nextDay();
-								
-								ObjectOutputStream obj_out = new ObjectOutputStream(client_socket.getOutputStream());
 								
 								obj_out.writeObject(sServer.getCommonSchedule());
 								obj_out.writeObject(sServer.getIdList());
 								obj_out.writeObject(sServer.getDateDay());
 								sock_out.writeUTF(sServer.getNotice());
 								sock_out.writeInt(sServer.personNum());
+								
 								
 								obj_in.close();
 								obj_out.close();

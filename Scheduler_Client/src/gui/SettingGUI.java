@@ -90,6 +90,8 @@ public class SettingGUI {
 		command = TEMP_PLUS;
 		
 		frame = new JFrame();
+		frame.setTitle("EZ2GATHER");
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginGUI.class.getResource("/resource/ez2gather.png")));
 		frame.setBounds(100, 100, 750, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -124,12 +126,6 @@ public class SettingGUI {
 		frame.getContentPane().setComponentZOrder(cellComp, 0);
 		frame.getContentPane().setComponentZOrder(sPanel, 1);
 		frame.getContentPane().setComponentZOrder(panel, 2);
-		
-		JTextPane textPane = new JTextPane();
-		textPane.setEditable(false);
-		textPane.setText("공지사항:" + netClient.getManager().getNotice());
-		textPane.setBounds(200, 17, 500, 25);
-		frame.getContentPane().add(textPane);
 		
 		panel.setVisible(true);
 		bPanel.setVisible(true);

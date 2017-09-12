@@ -2,6 +2,7 @@ package client;
 
 import common.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.io.*;
 //1 : 시간이 되는거, 0 : 안되는가
 
@@ -36,6 +37,7 @@ public class UserManager {
 	
 	
 	public UserManager(String _ID){
+		findDay = new Day[COL];
 		
 		loadData(ID);
 		
@@ -44,7 +46,6 @@ public class UserManager {
 		people = new ArrayList<Integer>();
 		notice = "";
 		ID = _ID;
-		findDay = new Day[COL];
 		
 		organizedTable = new short[ROW][COL];
 		
@@ -89,6 +90,7 @@ public class UserManager {
 			FileOutputStream fp = new FileOutputStream(ID + "data.bin");
 			ObjectOutputStream op = new ObjectOutputStream(fp);
 			
+			op.writeObject(findDay[0]);
 			op.writeObject(FixedSchedule);
 			op.writeObject(personalTable);
 			
@@ -103,12 +105,14 @@ public class UserManager {
 			FileInputStream fp = new FileInputStream(ID + "data.bin");
 			ObjectInputStream op = new ObjectInputStream(fp);
 			
+			setDay( (Day) op.readObject() );
 			FixedSchedule = ( ArrayList<FixedScheduleUnit>) op.readObject();
 			personalTable = (short[][]) op.readObject();
 			
 			op.close();
 			
 		} catch(FileNotFoundException e){
+			setDay(getDateDay());
 			FixedSchedule = new ArrayList<FixedScheduleUnit>();
 			personalTable = new short[ROW][COL];
 		}
@@ -220,6 +224,61 @@ public class UserManager {
 	public boolean Check_Edited()
 	{
 		return isModified;
+	}
+	
+	public void nextDay(Day target){
+		Day tmpDay = target;
+		Day today = findDay[0];
+		
+		while(tmpDay != today){
+		
+			today = Day.getNextDay(today);
+			
+			for(int i=0;i<ROW;i++){
+				for(int j=0;j<COL-1;j++){
+					personalTable[i][j] = personalTable[i][j+1];
+				}
+			}
+			
+		}
+		
+		return;
+	}
+	
+	public Day getDateDay() {// find today.
+
+		Day day = null;
+	    Calendar cal = Calendar.getInstance() ;
+
+	    int dayNum = cal.get(Calendar.DAY_OF_WEEK) ;
+	    
+	     
+	    switch(dayNum){
+	        case 1:
+	            day = Day.SUN;
+	            break ;
+	        case 2:
+	            day = Day.MON;
+	            break ;
+	        case 3:
+	            day = Day.TUE;
+	            break ;
+	        case 4:
+	            day = Day.WED;
+	            break ;
+	        case 5:
+	            day = Day.THU;
+	            break ;
+	        case 6:
+	            day = Day.FRI;
+	            break ;
+	        case 7:
+	            day = Day.SAT;
+	            break ;
+	             
+	    }
+	     
+	    return day ;
 	}
 	
 	public void renewal(Day d, short[][] newPTable, short[][] newOTable)

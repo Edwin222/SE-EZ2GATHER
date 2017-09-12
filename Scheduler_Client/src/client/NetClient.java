@@ -62,6 +62,8 @@ public class NetClient {
 					String notice = sock_in.readUTF();
 					int personNum = sock_in.readInt();
 					
+					manager.nextDay(day);
+					
 					manager.setOTable(table);
 					manager.setIDlist(idList);
 					manager.setNotice(notice);
@@ -83,18 +85,18 @@ public class NetClient {
 					manager.saveData(manager.getID());
 					
 					ObjectOutputStream obj_out = new ObjectOutputStream(socket.getOutputStream());
+					ObjectInputStream obj_in = new ObjectInputStream(socket.getInputStream());
 					
 					obj_out.writeObject(manager.getFixedSchedule());
 					obj_out.writeObject(manager.getPTable());
-					
-					ObjectInputStream obj_in = new ObjectInputStream(socket.getInputStream());
-					
+
 					short[][] table = (short[][]) obj_in.readObject();
 					String[] idList = (String[]) obj_in.readObject();
 					Day day = (Day) obj_in.readObject();
 					String notice = sock_in.readUTF();
 					int personNum = sock_in.readInt();
 					
+					manager.nextDay(day);
 					
 					manager.setOTable(table);
 					manager.setIDlist(idList);

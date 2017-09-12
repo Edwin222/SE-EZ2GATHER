@@ -54,6 +54,14 @@ public class ScheduleManager {
 			commonSchedule.add(new DaySchedule(days[k]));
 			
 	}
+	
+	public void setDays(Day day){
+		
+		for(int i=0;i<7;i++){
+			days[i] = day;
+			day = Day.getNextDay(day);
+		}
+	}
  
 	/**************************************************************/
 	/* isIDexist         		           					      */
@@ -115,7 +123,7 @@ public class ScheduleManager {
 
 			for (int j = 0; j < TIMENUM; j++)// initializing for ID in commonFixedSchedule.
 				for (int k = 0; k < DATENUM; k++){
-					organizedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
+					organizedSchedule[j][k] = (short) (organizedSchedule[j][k] + (1 << i));
 					organizedFixedSchedule[j][k] = (short) (organizedFixedSchedule[j][k] + (1 << i));
 				}
 				
@@ -134,7 +142,7 @@ public class ScheduleManager {
 	/* 				commonSchedule의 해당 idx의 1값을 delete한다. 										*/
 	/* return : none										  									*/
 	/********************************************************************************************/
-	public void deleteID(String id) {
+	public void deleteID(String id, int personNum) {
 		int IDNUM = isIDexist(id);
 		if (IDNUM == -1) {
 			System.out.println("not exist ID.");
@@ -147,8 +155,8 @@ public class ScheduleManager {
 			// delete existing elements.
 			for(int i = 0; i < TIMENUM; i++)
 				for(int j = 0 ; j < DATENUM; j++){
-					organizedSchedule[i][j] = cleanID(organizedSchedule[i][j],IDNUM);
-					organizedFixedSchedule[i][j] = cleanID(organizedFixedSchedule[i][j],IDNUM);
+					organizedSchedule[i][j] = removeID(organizedSchedule[i][j],IDNUM, personNum);
+					organizedFixedSchedule[i][j] = removeID(organizedFixedSchedule[i][j], IDNUM, personNum);
 				}
 		}
 		updateCommonList();
@@ -199,7 +207,7 @@ public class ScheduleManager {
 	/* 				update된 FixedSchedule, Schedule을 이용하여 commonList update.			*/
 	/* return : none										  							*/
 	/************************************************************************************/
-	public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx, int personNum) {
+	synchronized public void updateSchedule(ArrayList<FixedScheduleUnit> fsc, short sc[][], int IDidx, int personNum) {
 		updateFixedSchedule(fsc, (personNum -1 - IDidx), personNum);
 
 		for (int i = 0; i < TIMENUM; i++)
@@ -219,7 +227,7 @@ public class ScheduleManager {
 	/* 				그후 FixedScheduleUnit하나하나를 읽어오면서 해당 내용을 organizedFixedUnit애 업대이트			*/
 	/* return : none										  										*/
 	/************************************************************************************************/
-	private void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx, int personNum) {
+	public void updateFixedSchedule(ArrayList<FixedScheduleUnit> fsc, int IDidx, int personNum) {
 		
 		for(int i=0;i<DATENUM;i++){
 			for(int j=0;j<TIMENUM;j++){
@@ -268,14 +276,15 @@ public class ScheduleManager {
 	/* process :	shot형 인자애서 id의 idx애 값이 있는지 확인후 있으면 지우고 없으면 그대로 반환			*/
 	/* return : update된 short형 인자							  							*/
 	/************************************************************************************/ 
-	  private short removeID(short sc,int id){ 
+	  private short removeID(short sc,int id, int personNum){ 
+		  id = personNum - 1- id;
 		  short result = sc;
 		  result = (short) (result >> 1);
 		  for (int i = 0; i < id; i++)
 			  if(isFilledTime(sc,i))
 				  result =  (short) (result | (1<<i));
-		 // else
-			//  return sc;
+			  else
+				  result = (short) (result & ~(1<<i));
 		  return result;
 	  }
 	  private short cleanID(short sc,int id){ 
@@ -321,48 +330,25 @@ public class ScheduleManager {
 	/* 				마지막요일이 가지고있던 FixedSchedule 정보이용하여 맨처음요일의 정보 update				*/
 	/* return : none										  								*/
 	/****************************************************************************************/
-	public void nextDay(){
-		
-		for(int i = 0; i < TIMENUM ; i++)
-		switch(commonSchedule.get(6).getDay()){
-		
-		case MON : commonSchedule.add(0,new DaySchedule(Day.MON));
-		commonSchedule.get(0).setScheduleUnit(organizedFixedSchedule[i][0],i);
-		commonSchedule.remove(7);
-		break;
-		
-		case TUE : commonSchedule.add(0,new DaySchedule(Day.TUE));
-		commonSchedule.get(0).setScheduleUnit(organizedFixedSchedule[i][1],i);
-		commonSchedule.remove(7);
-		break;
-		
-		case WED : commonSchedule.add(0,new DaySchedule(Day.WED));
-		commonSchedule.get(0).setScheduleUnit(organizedFixedSchedule[i][2],i);
-		commonSchedule.remove(7);
-		break;
-		
-		case THU : commonSchedule.add(0,new DaySchedule(Day.THU));
-		commonSchedule.get(0).setScheduleUnit(organizedFixedSchedule[i][3],i);
-		commonSchedule.remove(7);
-		break;
-		
-		case FRI : commonSchedule.add(0,new DaySchedule(Day.FRI));
-		commonSchedule.get(0).setScheduleUnit(organizedFixedSchedule[i][4],i);
-		commonSchedule.remove(7);
-		break;
-		
-		case SAT : commonSchedule.add(0,new DaySchedule(Day.SAT));
-		commonSchedule.get(0).setScheduleUnit(organizedFixedSchedule[i][5],i);
-		commonSchedule.remove(7);
-		break;
-		
-		case SUN : commonSchedule.add(0,new DaySchedule(Day.SUN));
-		commonSchedule.get(0).setScheduleUnit(organizedFixedSchedule[i][6],i);
-		commonSchedule.remove(7);
-		break;
+	public void nextDay(int personNum){
+		for(int i = 0; i< DATENUM-1; i++){
+			for(int j = 0;j< TIMENUM ; j++){
+				organizedSchedule[j][i] = organizedSchedule[j][i+1];
+			}
 		}
 		
+		for(int j = 0;j< TIMENUM ; j++){
+			organizedSchedule[j][DATENUM-1] = (short) ((1 << personNum) - 1);
+		}
 		
+		DaySchedule newDay = new DaySchedule(days[0]);
+		for(int i = 0; i < TIMENUM ; i++){
+			newDay.getSchedule()[i] = (short) ((1 << personNum) - 1);
+		}
+		
+		commonSchedule.add(7, newDay);
+		commonSchedule.remove(0);
+		setDays(days[1]);
 	}
 	
 	public Day getToday(){

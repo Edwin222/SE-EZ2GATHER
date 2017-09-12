@@ -90,6 +90,8 @@ public class SchedulerGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("EZ2GATHER");
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginGUI.class.getResource("/resource/ez2gather.png")));
 		frame.setBounds(100, 100, 750, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

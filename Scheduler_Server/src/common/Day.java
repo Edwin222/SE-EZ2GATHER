@@ -1,6 +1,8 @@
 package common;
 
-public enum Day { 
+import java.io.Serializable;
+
+public enum Day implements Serializable { 
 	MON, TUE, WED, THU, FRI, SAT, SUN;
 	
 	public static Day getNextDay(Day d){

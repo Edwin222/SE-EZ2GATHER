@@ -14,12 +14,13 @@ public class ScheduleServer {
 	public final int DATENUM = 7;
 	public final int MAXIDNUM = 8;
 	public final int TIMENUM = 12;
+	
 	// Scanner
 	Scanner scan = new Scanner(System.in);
 
 	// Notice part instance
 	private String Notice;
-	private Day today;
+	private Day lastDay;
 	
 	// Schedule part instance
 	private ScheduleManager Schedule;
@@ -28,8 +29,8 @@ public class ScheduleServer {
 	//constructor
 	public ScheduleServer(){		
 		this.Notice = "";
-		this.today = getDateDay();
-		Schedule = new ScheduleManager(today);
+		
+		Schedule = new ScheduleManager(getDateDay());
 
 	}
 	
@@ -118,7 +119,7 @@ public class ScheduleServer {
 	/* return : none										  							*/	
 	/************************************************************************************/
 	public void deleteID(String id) {
-		Schedule.deleteID(id);
+		Schedule.deleteID(id, personNum());
 		updateCommonSchedule();
 	}
 	
@@ -143,18 +144,45 @@ public class ScheduleServer {
 	/*			 을 update해 준다음  updateCommonSchedule이용하여 update된 내용 유지						*/
 	/* return : none										  									*/	
 	/********************************************************************************************/
-	public void setcommonSchedule(String id, ArrayList<FixedScheduleUnit> PersonalFixedSchedule, short[][] schedule) {
+	synchronized public void setcommonSchedule(String id, ArrayList<FixedScheduleUnit> PersonalFixedSchedule, short[][] schedule) {
 
 		int IDidx = Schedule.isIDexist(id);
 
 		if (IDidx != -1){
+			
+			Day tmpDay = getDateDay();
+			
 			Schedule.updateSchedule(PersonalFixedSchedule, schedule, IDidx, personNum());
 			updateCommonSchedule();
+			
+			
+			while(tmpDay != lastDay){
+			
+				this.lastDay = tomorrow(lastDay);
+				Schedule.nextDay(personNum());
+				Schedule.updateFixedSchedule(PersonalFixedSchedule, IDidx, personNum());
+				Schedule.updateCommonList();
+				updateCommonSchedule();
+			}
+			
 		}
 
 		else {
 			System.out.println("not exist ID.");
 		}
+	}
+	
+	synchronized public void nextDay(){
+		Day tmpDay = getDateDay();
+		
+		while(tmpDay != lastDay){
+		
+			this.lastDay = tomorrow(lastDay);
+			Schedule.nextDay(personNum());
+			Schedule.updateCommonList();
+		}
+			
+			return;
 	}
 	
 	/****************************************************************************************/
@@ -173,18 +201,6 @@ public class ScheduleServer {
 	/* process : 현재날짜를 검사 후 요일 다르면 	같은 요일이 나올 때 까지 ScheduleManager의 nextDay 호출.		*/
 	/* return : none										  								*/	
 	/****************************************************************************************/
-	public void nextDay(){
-		Day tmpDay = getDateDay();
-		
-		while(tmpDay != today){
-		
-			this.today = tomorrow(today);
-			Schedule.nextDay();
-			
-		}
-			
-			return;
-	}
 	
 	public Day tomorrow(Day today){
 		switch(today){
@@ -209,9 +225,12 @@ public class ScheduleServer {
 	/********************************************************************************************/
 	   public void saveData(){
 		      try {
+		    	  lastDay = getDateDay();
+		    	  
 		         FileOutputStream fp = new FileOutputStream("data.bin");
 		         ObjectOutputStream op = new ObjectOutputStream(fp);
 		         
+		         op.writeObject(lastDay);
 		         op.writeObject(Schedule.getID());
 		         op.writeObject(Schedule.getcommonSchedule());
 		         op.writeObject(Schedule.getorganizedFixedSchedule());
@@ -236,6 +255,7 @@ public class ScheduleServer {
 		         FileInputStream fp = new FileInputStream("data.bin");
 		         ObjectInputStream op = new ObjectInputStream(fp);
 		         
+		         lastDay = (Day) op.readObject();
 		         Schedule.setID((String[]) op.readObject());
 		         Schedule.setcommonSchedule((ArrayList<DaySchedule>) op.readObject());
 		         Schedule.setorganizedFixedSchedule((short[][]) op.readObject());
@@ -246,6 +266,7 @@ public class ScheduleServer {
 		         
 		      } 
 		      catch(FileNotFoundException e){
+		    	  lastDay = getDateDay();
 		      }
 		      catch(Exception e){
 			     e.printStackTrace();
